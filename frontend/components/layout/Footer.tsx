@@ -3,7 +3,7 @@ import { Mail, Phone, MapPin, Facebook, Instagram, Twitter } from "lucide-react"
 
 export default function Footer() {
   return (
-    <footer className="bg-gray-900 text-gray-300 mt-auto">
+    <footer className="bg-neutral-900 text-neutral-300 mt-auto">
       <div className="container mx-auto px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* About */}
@@ -13,13 +13,13 @@ export default function Footer() {
               Sua loja online de confiança com os melhores produtos e preços.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="hover:text-white transition-colors">
+              <a href="#" className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center hover:bg-primary-500 transition-all hover:scale-110">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a href="#" className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center hover:bg-primary-500 transition-all hover:scale-110">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="hover:text-white transition-colors">
+              <a href="#" className="w-10 h-10 bg-primary-600 rounded-full flex items-center justify-center hover:bg-primary-500 transition-all hover:scale-110">
                 <Twitter size={20} />
               </a>
             </div>
@@ -99,7 +99,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm">
+        <div className="border-t border-neutral-800 mt-8 pt-8 text-center text-sm">
           <p>&copy; {new Date().getFullYear()} WebMoveis. Todos os direitos reservados.</p>
         </div>
       </div>
