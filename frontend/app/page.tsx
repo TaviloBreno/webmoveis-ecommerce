@@ -6,6 +6,7 @@ import { ShoppingBag, TrendingUp, Shield, Truck, Star, ArrowRight, Package, Cred
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import Button from "@/components/ui/Button";
+import HeroSlider from "@/components/ui/HeroSlider";
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 20 },
@@ -33,100 +34,87 @@ const staggerContainer = {
 };
 
 export default function Home() {
+  const heroSlides = [
+    {
+      id: 1,
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80",
+      title: "Sua Loja Online de Confiança",
+      subtitle: "Encontre os melhores produtos com preços incríveis",
+      cta: {
+        text: "Ver Produtos",
+        link: "/produtos"
+      }
+    },
+    {
+      id: 2,
+      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920&q=80",
+      title: "Tecnologia de Ponta",
+      subtitle: "Os últimos lançamentos em eletrônicos e gadgets",
+      cta: {
+        text: "Explorar",
+        link: "/produtos"
+      }
+    },
+    {
+      id: 3,
+      image: "https://images.unsplash.com/photo-1441984904996-e0b6ba687e04?w=1920&q=80",
+      title: "Frete Grátis",
+      subtitle: "Em compras acima de R$ 200 para todo Brasil",
+      cta: {
+        text: "Aproveitar",
+        link: "/produtos"
+      }
+    },
+    {
+      id: 4,
+      image: "https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1920&q=80",
+      title: "Moda & Estilo",
+      subtitle: "As últimas tendências em moda e acessórios",
+      cta: {
+        text: "Descobrir",
+        link: "/produtos"
+      }
+    }
+  ];
+
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative min-h-[600px] lg:min-h-[700px] overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1920&q=80"
-            alt="Shopping Background"
-            fill
-            className="object-cover brightness-50"
-            priority
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-900/90 to-primary-700/80"></div>
+      {/* Hero Slider */}
+      <HeroSlider slides={heroSlides} autoPlayInterval={6000} />
+
+      {/* Stats Section */}
+      <section className="py-12 bg-white border-b border-neutral-200">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+            className="grid grid-cols-3 gap-6 max-w-4xl mx-auto text-center"
+          >
+            <motion.div variants={fadeInUp}>
+              <div className="text-4xl lg:text-5xl font-bold text-primary-600 mb-1">10k+</div>
+              <div className="text-neutral-600 font-medium">Produtos</div>
+            </motion.div>
+            <motion.div variants={fadeInUp}>
+              <div className="text-4xl lg:text-5xl font-bold text-primary-600 mb-1">50k+</div>
+              <div className="text-neutral-600 font-medium">Clientes</div>
+            </motion.div>
+            <motion.div variants={fadeInUp}>
+              <div className="text-4xl lg:text-5xl font-bold text-primary-600 mb-1 flex items-center justify-center">
+                4.9
+                <Star className="w-6 h-6 fill-yellow-400 text-yellow-400 ml-2" />
+              </div>
+              <div className="text-neutral-600 font-medium">Avaliação</div>
+            </motion.div>
+          </motion.div>
         </div>
-
-        {/* Content */}
-        <div className="relative z-10 container mx-auto px-4 py-24 lg:py-32">
-          <div className="max-w-3xl">
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={staggerContainer}
-            >
-              <motion.div variants={fadeInUp} className="mb-4">
-                <span className="inline-block px-4 py-2 bg-accent-500 text-white rounded-full text-sm font-semibold">
-                  ✨ Novidade: Frete Grátis acima de R$ 200
-                </span>
-              </motion.div>
-              
-              <motion.h1
-                variants={fadeInUp}
-                className="text-5xl lg:text-7xl font-bold mb-6 text-white leading-tight"
-              >
-                Sua Loja Online
-                <span className="block text-accent-400">de Confiança</span>
-              </motion.h1>
-              
-              <motion.p
-                variants={fadeInUp}
-                className="text-xl lg:text-2xl mb-8 text-gray-200 leading-relaxed"
-              >
-                Encontre os melhores produtos com preços incríveis. 
-                Entrega rápida e segura para todo o Brasil.
-              </motion.p>
-              
-              <motion.div
-                variants={fadeInUp}
-                className="flex flex-wrap gap-4"
-              >
-                <Link href="/produtos">
-                  <Button size="lg" className="bg-accent-500 hover:bg-accent-600 text-white shadow-xl group">
-                    <ShoppingBag className="mr-2 group-hover:scale-110 transition-transform" size={20} />
-                    Começar a Comprar
-                    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" size={20} />
-                  </Button>
-                </Link>
-                <Link href="/registro">
-                  <Button size="lg" variant="outline" className="bg-white/10 border-white text-white hover:bg-white hover:text-primary-600 backdrop-blur-sm">
-                    Criar Conta Grátis
-                  </Button>
-                </Link>
-              </motion.div>
-
-              {/* Stats */}
-              <motion.div
-                variants={fadeInUp}
-                className="mt-12 grid grid-cols-3 gap-6 max-w-xl"
-              >
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-white mb-1">10k+</div>
-                  <div className="text-gray-300 text-sm">Produtos</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-white mb-1">50k+</div>
-                  <div className="text-gray-300 text-sm">Clientes</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl lg:text-4xl font-bold text-white mb-1">4.9</div>
-                  <div className="text-gray-300 text-sm flex items-center justify-center">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400 mr-1" />
-                    Avaliação
+      </section>
                   </div>
                 </div>
               </motion.div>
             </motion.div>
           </div>
-        </div>
-
-        {/* Wave Divider */}
-        <div className="absolute bottom-0 left-0 right-0 z-10">
-          <svg viewBox="0 0 1440 120" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 120L60 110C120 100 240 80 360 70C480 60 600 60 720 65C840 70 960 80 1080 85C1200 90 1320 90 1380 90L1440 90V120H1380C1320 120 1200 120 1080 120C960 120 840 120 720 120C600 120 480 120 360 120C240 120 120 120 60 120H0Z" fill="var(--bg-primary)"/>
-          </svg>
         </div>
       </section>
 
