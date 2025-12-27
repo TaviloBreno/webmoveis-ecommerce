@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
@@ -12,11 +12,11 @@ import { cartService } from "@/services/cart.service";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
 import { formatCurrency } from "@/lib/utils";
-import { ShoppingCart, Heart, Filter, Grid, List, Star, TrendingUp } from "lucide-react";
+import { ShoppingCart, Heart, Filter, Grid, List, Star, TrendingUp, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function ProdutosPage() {
+function ProdutosContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { isAuthenticated } = useAuthStore();
@@ -348,5 +348,19 @@ export default function ProdutosPage() {
         )}
       </div>
     </Layout>
+  );
+}
+
+export default function ProdutosPage() {
+  return (
+    <Suspense fallback={
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="animate-spin text-primary-600" size={48} />
+        </div>
+      </Layout>
+    }>
+      <ProdutosContent />
+    </Suspense>
   );
 }

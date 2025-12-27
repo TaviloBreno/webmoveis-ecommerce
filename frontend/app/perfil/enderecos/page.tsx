@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
@@ -16,7 +16,7 @@ const fadeInUp = {
   visible: { opacity: 1, y: 0 },
 };
 
-export default function EnderecosPage() {
+function EnderecosContent() {
   const searchParams = useSearchParams();
   const editId = searchParams?.get("edit");
 
@@ -502,5 +502,19 @@ export default function EnderecosPage() {
         </div>
       </Layout>
     </ProtectedRoute>
+  );
+}
+
+export default function EnderecosPage() {
+  return (
+    <Suspense fallback={
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="animate-spin text-primary-600" size={48} />
+        </div>
+      </Layout>
+    }>
+      <EnderecosContent />
+    </Suspense>
   );
 }
