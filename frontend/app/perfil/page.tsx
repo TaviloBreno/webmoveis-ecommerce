@@ -1,316 +1,198 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-import Layout from "@/components/layout/Layout";
-import Card, { CardBody, CardHeader } from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
-import ProtectedRoute from "@/components/auth/ProtectedRoute";
-import { useAuthStore } from "@/lib/store/auth-store";
-import { userService } from "@/services/other.service";
-import { User, Lock, Award, MapPin } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/auth-store';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import StatsCard from '@/components/dashboard/StatsCard';
+import { 
+  ShoppingCart, 
+  Heart, 
+  MapPin, 
+  Trophy,
+  Package,
+  TrendingUp,
+  Star
+} from 'lucide-react';
 
-export default function PerfilPage() {
-  const { user, setAuth } = useAuthStore();
-  const [activeTab, setActiveTab] = useState<"profile" | "password" | "loyalty">("profile");
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
+export default function ClienteDashboard() {
+  const router = useRouter();
+  const { user, token } = useAuthStore();
+  const [loading, setLoading] = useState(true);
 
-  const [profileData, setProfileData] = useState({
-    name: user?.name || "",
-    email: user?.email || "",
-    phone: "",
-    cpf: "",
-  });
-
-  const [passwordData, setPasswordData] = useState({
-    old_password: "",
-    new_password: "",
-    confirm_password: "",
-  });
-
-  const handleUpdateProfile = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage("");
-
-    try {
-      const response = await userService.updateProfile(profileData);
-      setAuth(response, localStorage.getItem("token") || "");
-      setMessage("Perfil atualizado com sucesso!");
-    } catch (error) {
-      setMessage("Erro ao atualizar perfil");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChangePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (passwordData.new_password !== passwordData.confirm_password) {
-      setMessage("As senhas não coincidem");
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
       return;
     }
+    setLoading(false);
+  }, [user, token, router]);
 
-    setLoading(true);
-    setMessage("");
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
-    try {
-      await userService.changePassword({
-        old_password: passwordData.old_password,
-        new_password: passwordData.new_password,
-      });
-      setMessage("Senha alterada com sucesso!");
-      setPasswordData({ old_password: "", new_password: "", confirm_password: "" });
-    } catch (error: any) {
-      setMessage(error.response?.data?.message || "Erro ao alterar senha");
-    } finally {
-      setLoading(false);
+  const stats = {
+    orders: 12,
+    wishlist: 8,
+    addresses: 2,
+    loyaltyPoints: user?.loyalty_points || 0,
+  };
+
+  const recentOrders = [
+    { id: 1, products: 'Sofá 3 Lugares + Mesa de Centro', total: 'R$ 2.450,00', status: 'Entregue', date: '20/12/2025' },
+    { id: 2, products: 'Cadeira Office Premium', total: 'R$ 890,00', status: 'Em trânsito', date: '25/12/2025' },
+    { id: 3, products: 'Estante Modular', total: 'R$ 1.200,00', status: 'Processando', date: '26/12/2025' },
+  ];
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Entregue': return 'bg-green-100 text-green-800';
+      case 'Em trânsito': return 'bg-blue-100 text-blue-800';
+      case 'Processando': return 'bg-yellow-100 text-yellow-800';
+      default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const loyaltyTiers: Record<string, { name: string; color: string; benefits: string[] }> = {
-    bronze: {
-      name: "Bronze",
-      color: "bg-orange-600",
-      benefits: ["1x pontos em compras", "Frete grátis acima de R$ 200"],
-    },
-    silver: {
-      name: "Prata",
-      color: "bg-gray-400",
-      benefits: ["1.2x pontos em compras", "Frete grátis acima de R$ 150", "5% desconto"],
-    },
-    gold: {
-      name: "Ouro",
-      color: "bg-yellow-500",
-      benefits: ["1.5x pontos em compras", "Frete grátis acima de R$ 100", "10% desconto"],
-    },
-    platinum: {
-      name: "Platina",
-      color: "bg-purple-600",
-      benefits: ["2x pontos em compras", "Frete grátis sempre", "15% desconto", "Acesso antecipado"],
-    },
+  const getLoyaltyTier = () => {
+    const tier = user?.loyalty_tier || 'bronze';
+    const colors = {
+      bronze: 'from-amber-700 to-amber-900',
+      silver: 'from-gray-400 to-gray-600',
+      gold: 'from-yellow-400 to-yellow-600',
+      platinum: 'from-purple-400 to-purple-600',
+    };
+    return colors[tier as keyof typeof colors] || colors.bronze;
   };
 
-  const currentTier = loyaltyTiers[user?.loyalty_tier || "bronze"];
-
   return (
-    <ProtectedRoute>
-      <Layout>
-        <div className="container mx-auto px-4 py-8">
-          <h1 className="text-3xl font-bold mb-8">Meu Perfil</h1>
+    <DashboardLayout>
+      <div className="max-w-7xl">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Meu Perfil</h1>
+          <p className="text-gray-600 mt-2">Bem-vindo de volta, {user?.name}!</p>
+        </div>
 
-          {message && (
-            <div
-              className={`mb-6 p-4 rounded-lg ${
-                message.includes("sucesso")
-                  ? "bg-green-50 text-green-800"
-                  : "bg-red-50 text-red-800"
-              }`}
-            >
-              {message}
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatsCard
+            title="Meus Pedidos"
+            value={stats.orders}
+            icon={ShoppingCart}
+            color="blue"
+          />
+          <StatsCard
+            title="Lista de Desejos"
+            value={stats.wishlist}
+            icon={Heart}
+            color="red"
+          />
+          <StatsCard
+            title="Endereços"
+            value={stats.addresses}
+            icon={MapPin}
+            color="green"
+          />
+          <StatsCard
+            title="Pontos Fidelidade"
+            value={stats.loyaltyPoints}
+            icon={Trophy}
+            color="yellow"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Orders */}
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Pedidos Recentes</h2>
+              <button 
+                onClick={() => router.push('/pedidos')}
+                className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+              >
+                Ver todos
+              </button>
             </div>
-          )}
-
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-            {/* Sidebar */}
-            <div className="space-y-2">
-              <button
-                onClick={() => setActiveTab("profile")}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === "profile"
-                    ? "bg-blue-600 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                <User size={20} />
-                <span>Dados Pessoais</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("password")}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === "password"
-                    ? "bg-blue-600 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                <Lock size={20} />
-                <span>Alterar Senha</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("loyalty")}
-                className={`w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 ${
-                  activeTab === "loyalty"
-                    ? "bg-blue-600 text-white"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                <Award size={20} />
-                <span>Programa de Fidelidade</span>
-              </button>
-              <Link
-                href="/perfil/enderecos"
-                className="w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 hover:bg-gray-100"
-              >
-                <MapPin size={20} />
-                <span>Meus Endereços</span>
-              </Link>
-            </div>
-
-            {/* Content */}
-            <div className="lg:col-span-3">
-              {activeTab === "profile" && (
-                <Card>
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold">Dados Pessoais</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <form onSubmit={handleUpdateProfile} className="space-y-4">
-                      <Input
-                        label="Nome Completo"
-                        value={profileData.name}
-                        onChange={(e) =>
-                          setProfileData({ ...profileData, name: e.target.value })
-                        }
-                        required
-                      />
-                      <Input
-                        label="E-mail"
-                        type="email"
-                        value={profileData.email}
-                        onChange={(e) =>
-                          setProfileData({ ...profileData, email: e.target.value })
-                        }
-                        required
-                      />
-                      <Input
-                        label="Telefone"
-                        type="tel"
-                        value={profileData.phone}
-                        onChange={(e) =>
-                          setProfileData({ ...profileData, phone: e.target.value })
-                        }
-                      />
-                      <Input
-                        label="CPF"
-                        value={profileData.cpf}
-                        onChange={(e) =>
-                          setProfileData({ ...profileData, cpf: e.target.value })
-                        }
-                      />
-                      <Button type="submit" isLoading={loading}>
-                        Salvar Alterações
-                      </Button>
-                    </form>
-                  </CardBody>
-                </Card>
-              )}
-
-              {activeTab === "password" && (
-                <Card>
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold">Alterar Senha</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <form onSubmit={handleChangePassword} className="space-y-4">
-                      <Input
-                        label="Senha Atual"
-                        type="password"
-                        value={passwordData.old_password}
-                        onChange={(e) =>
-                          setPasswordData({
-                            ...passwordData,
-                            old_password: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                      <Input
-                        label="Nova Senha"
-                        type="password"
-                        value={passwordData.new_password}
-                        onChange={(e) =>
-                          setPasswordData({
-                            ...passwordData,
-                            new_password: e.target.value,
-                          })
-                        }
-                        required
-                        minLength={6}
-                      />
-                      <Input
-                        label="Confirmar Nova Senha"
-                        type="password"
-                        value={passwordData.confirm_password}
-                        onChange={(e) =>
-                          setPasswordData({
-                            ...passwordData,
-                            confirm_password: e.target.value,
-                          })
-                        }
-                        required
-                        minLength={6}
-                      />
-                      <Button type="submit" isLoading={loading}>
-                        Alterar Senha
-                      </Button>
-                    </form>
-                  </CardBody>
-                </Card>
-              )}
-
-              {activeTab === "loyalty" && (
-                <Card>
-                  <CardHeader>
-                    <h2 className="text-xl font-semibold">Programa de Fidelidade</h2>
-                  </CardHeader>
-                  <CardBody>
-                    <div className="mb-8">
-                      <div className="flex items-center justify-between mb-4">
-                        <div>
-                          <h3 className="text-2xl font-bold">
-                            {user?.loyalty_points || 0} pontos
-                          </h3>
-                          <p className="text-gray-600">Seu saldo atual</p>
-                        </div>
-                        <div
-                          className={`px-6 py-3 rounded-lg text-white font-bold ${currentTier.color}`}
-                        >
-                          {currentTier.name}
-                        </div>
-                      </div>
-
-                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-                        <h4 className="font-semibold mb-2">Seus Benefícios:</h4>
-                        <ul className="space-y-1">
-                          {currentTier.benefits.map((benefit, index) => (
-                            <li key={index} className="flex items-center space-x-2">
-                              <span className="text-blue-600">✓</span>
-                              <span>{benefit}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-
-                      <div className="space-y-3">
-                        <h4 className="font-semibold">Como Ganhar Pontos:</h4>
-                        <p className="text-gray-600">
-                          • A cada R$ 1,00 em compras, você ganha 1 ponto (multiplicado pelo
-                          seu tier)
-                        </p>
-                        <p className="text-gray-600">
-                          • 1 ponto = R$ 0,01 de desconto em compras futuras
-                        </p>
-                      </div>
+            <div className="space-y-4">
+              {recentOrders.map((order) => (
+                <div key={order.id} className="border border-gray-200 rounded-lg p-4 hover:border-blue-300 transition-colors">
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex-1">
+                      <p className="font-semibold text-gray-900">{order.products}</p>
+                      <p className="text-sm text-gray-600 mt-1">{order.date}</p>
                     </div>
-                  </CardBody>
-                </Card>
-              )}
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                      {order.status}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between mt-3">
+                    <span className="text-lg font-bold text-gray-900">{order.total}</span>
+                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm font-medium">
+                      Ver detalhes
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Sidebar */}
+          <div className="space-y-6">
+            {/* Programa de Fidelidade */}
+            <div className={`bg-gradient-to-br ${getLoyaltyTier()} rounded-xl p-6 text-white`}>
+              <div className="flex items-center space-x-2 mb-4">
+                <Trophy size={24} />
+                <h3 className="text-lg font-bold">Programa Fidelidade</h3>
+              </div>
+              <p className="text-2xl font-bold mb-2">{stats.loyaltyPoints} pontos</p>
+              <p className="text-sm opacity-90 capitalize mb-4">Nível: {user?.loyalty_tier}</p>
+              <div className="bg-white/20 rounded-full h-2 mb-2">
+                <div className="bg-white rounded-full h-2" style={{ width: '65%' }}></div>
+              </div>
+              <p className="text-xs opacity-75">350 pontos até o próximo nível</p>
+            </div>
+
+            {/* Quick Actions */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Ações Rápidas</h3>
+              <div className="space-y-2">
+                <button 
+                  onClick={() => router.push('/produtos')}
+                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span className="text-sm font-medium text-gray-700">Continuar Comprando</span>
+                  <Package size={18} className="text-gray-400" />
+                </button>
+                <button 
+                  onClick={() => router.push('/wishlist')}
+                  className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors"
+                >
+                  <span className="text-sm font-medium text-gray-700">Meus Favoritos</span>
+                  <Heart size={18} className="text-gray-400" />
+                </button>
+                <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                  <span className="text-sm font-medium text-gray-700">Avaliar Produtos</span>
+                  <Star size={18} className="text-gray-400" />
+                </button>
+              </div>
+            </div>
+
+            {/* Benefícios */}
+            <div className="bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl p-6 text-white">
+              <TrendingUp size={24} className="mb-3" />
+              <h3 className="text-lg font-bold mb-2">Benefícios Exclusivos</h3>
+              <p className="text-sm opacity-90">
+                Aproveite frete grátis em compras acima de R$ 500,00 e ganhe pontos em dobro!
+              </p>
             </div>
           </div>
         </div>
-      </Layout>
-    </ProtectedRoute>
+      </div>
+    </DashboardLayout>
   );
 }

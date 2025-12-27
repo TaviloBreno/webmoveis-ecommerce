@@ -1,175 +1,184 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
-import Layout from "@/components/layout/Layout";
-import RoleProtectedRoute from "@/components/auth/RoleProtectedRoute";
-import Card from "@/components/ui/Card";
-import Button from "@/components/ui/Button";
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/lib/store/auth-store';
+import DashboardLayout from '@/components/dashboard/DashboardLayout';
+import StatsCard from '@/components/dashboard/StatsCard';
 import { 
-  Users, 
-  Package, 
+  DollarSign, 
   ShoppingCart, 
-  TrendingUp, 
-  DollarSign,
-  Settings,
-  BarChart,
-  FileText
-} from "lucide-react";
+  Users, 
+  Package,
+  TrendingUp,
+  AlertCircle
+} from 'lucide-react';
 
 export default function AdminDashboard() {
   const stats = [
     {
-      icon: DollarSign,
-      title: "Receita Total",
-      value: "R$ 125.450,00",
-      change: "+12.5%",
-      positive: true
-    },
-    {
-      icon: ShoppingCart,
-      title: "Pedidos",
-      value: "1.234",
-      change: "+8.2%",
-      positive: true
-    },
-    {
-      icon: Users,
-      title: "Clientes",
-      value: "5.678",
-      change: "+5.1%",
-      positive: true
-    },
-    {
-      icon: Package,
-      title: "Produtos",
-      value: "890",
-      change: "-2.3%",
-      positive: false
+  const router = useRouter();
+  const { user, token } = useAuthStore();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!token) {
+      router.push('/login');
+      return;
     }
+    if (user?.role !== 'admin') {
+      router.push('/perfil');
+      return;
+    }
+    setLoading(false);
+  }, [user, token, router]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
+
+  // Dados mockados - em produção viriam da API
+  const stats = {
+    revenue: 'R$ 52.840',
+    orders: 342,
+    customers: 1.258,
+    products: 156,
+  };
+
+  const recentOrders = [
+    { id: 1, customer: 'João Silva', total: 'R$ 450,00', status: 'Entregue', date: '27/12/2025' },
+    { id: 2, customer: 'Maria Santos', total: 'R$ 1.200,00', status: 'Processando', date: '27/12/2025' },
+    { id: 3, customer: 'Pedro Costa', total: 'R$ 680,00', status: 'Enviado', date: '26/12/2025' },
+    { id: 4, customer: 'Ana Lima', total: 'R$ 890,00', status: 'Pendente', date: '26/12/2025' },
   ];
 
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'Entregue': return 'bg-green-100 text-green-800';
+      case 'Enviado': return 'bg-blue-100 text-blue-800';
+      case 'Processando': return 'bg-yellow-100 text-yellow-800';
+      case 'Pendente': return 'bg-gray-100 text-gray-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
   return (
-    <RoleProtectedRoute allowedRoles={["admin"]}>
-      <Layout>
-        <div className="container mx-auto px-4 py-8">
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-4xl font-bold text-neutral-900 mb-2">
-              Dashboard Admin
-            </h1>
-            <p className="text-neutral-600">
-              Visão geral do seu e-commerce
-            </p>
+    <DashboardLayout>
+      <div className="max-w-7xl">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Dashboard Administrativo</h1>
+          <p className="text-gray-600 mt-2">Bem-vindo de volta, {user?.name}!</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <StatsCard
+            title="Receita Total"
+            value={stats.revenue}
+            icon={DollarSign}
+            trend={{ value: 12.5, isPositive: true }}
+            color="green"
+          />
+          <StatsCard
+            title="Pedidos"
+            value={stats.orders}
+            icon={ShoppingCart}
+            trend={{ value: 8.2, isPositive: true }}
+            color="blue"
+          />
+          <StatsCard
+            title="Clientes"
+            value={stats.customers}
+            icon={Users}
+            trend={{ value: 5.7, isPositive: true }}
+            color="purple"
+          />
+          <StatsCard
+            title="Produtos"
+            value={stats.products}
+            icon={Package}
+            color="yellow"
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Recent Orders */}
+          <div className="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">Pedidos Recentes</h2>
+              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
+                Ver todos
+              </button>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Cliente</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Total</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Status</th>
+                    <th className="text-left py-3 px-4 text-sm font-semibold text-gray-600">Data</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {recentOrders.map((order) => (
+                    <tr key={order.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 text-sm text-gray-900">{order.customer}</td>
+                      <td className="py-3 px-4 text-sm font-medium text-gray-900">{order.total}</td>
+                      <td className="py-3 px-4">
+                        <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(order.status)}`}>
+                          {order.status}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-sm text-gray-600">{order.date}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          {/* Stats Grid */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card hover>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="p-3 bg-primary-100 rounded-lg">
-                        <stat.icon className="text-primary-600" size={24} />
-                      </div>
-                      <span className={`text-sm font-semibold ${
-                        stat.positive ? "text-accent-600" : "text-red-600"
-                      }`}>
-                        {stat.change}
-                      </span>
-                    </div>
-                    <h3 className="text-neutral-600 text-sm mb-1">{stat.title}</h3>
-                    <p className="text-2xl font-bold text-neutral-900">{stat.value}</p>
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Quick Actions */}
-          <Card className="mb-8">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-neutral-900 mb-6">
-                Ações Rápidas
-              </h2>
-              <div className="grid md:grid-cols-3 gap-4">
-                <Button className="w-full justify-start" size="lg">
-                  <Package className="mr-3" size={20} />
-                  Gerenciar Produtos
-                </Button>
-                <Button className="w-full justify-start" size="lg" variant="secondary">
-                  <Users className="mr-3" size={20} />
-                  Gerenciar Usuários
-                </Button>
-                <Button className="w-full justify-start" size="lg" variant="outline">
-                  <FileText className="mr-3" size={20} />
-                  Relatórios
-                </Button>
+          {/* Quick Actions & Alerts */}
+          <div className="space-y-6">
+            {/* Quick Actions */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-bold text-gray-900 mb-4">Ações Rápidas</h3>
+              <div className="space-y-2">
+                <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                  <span className="text-sm font-medium text-gray-700">Adicionar Produto</span>
+                  <Package size={18} className="text-gray-400" />
+                </button>
+                <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                  <span className="text-sm font-medium text-gray-700">Gerenciar Usuários</span>
+                  <Users size={18} className="text-gray-400" />
+                </button>
+                <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg transition-colors">
+                  <span className="text-sm font-medium text-gray-700">Ver Relatórios</span>
+                  <TrendingUp size={18} className="text-gray-400" />
+                </button>
               </div>
             </div>
-          </Card>
 
-          {/* Recent Orders */}
-          <div className="grid lg:grid-cols-2 gap-8">
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-neutral-900">
-                    Pedidos Recentes
-                  </h2>
-                  <Button variant="ghost" size="sm">Ver Todos</Button>
-                </div>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex items-center justify-between pb-4 border-b border-neutral-200 last:border-0">
-                      <div>
-                        <p className="font-semibold text-neutral-900">#ORD{1000 + i}</p>
-                        <p className="text-sm text-neutral-600">Cliente {i}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-primary-600">R$ {(Math.random() * 500 + 100).toFixed(2)}</p>
-                        <span className="text-xs px-2 py-1 bg-accent-100 text-accent-700 rounded-full">
-                          Concluído
-                        </span>
-                      </div>
-                    </div>
-                  ))}
+            {/* Alerts */}
+            <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+              <div className="flex items-start space-x-3">
+                <AlertCircle className="text-yellow-600 flex-shrink-0 mt-0.5" size={20} />
+                <div>
+                  <h3 className="text-sm font-semibold text-yellow-900 mb-1">Atenção</h3>
+                  <p className="text-sm text-yellow-800">
+                    5 produtos com estoque baixo precisam de reposição.
+                  </p>
                 </div>
               </div>
-            </Card>
-
-            <Card>
-              <div className="p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-bold text-neutral-900">
-                    Produtos em Destaque
-                  </h2>
-                  <Button variant="ghost" size="sm">Ver Todos</Button>
-                </div>
-                <div className="space-y-4">
-                  {[1, 2, 3, 4].map((i) => (
-                    <div key={i} className="flex items-center justify-between pb-4 border-b border-neutral-200 last:border-0">
-                      <div>
-                        <p className="font-semibold text-neutral-900">Produto {i}</p>
-                        <p className="text-sm text-neutral-600">{Math.floor(Math.random() * 50)} vendas</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="font-semibold text-neutral-900">R$ {(Math.random() * 200 + 50).toFixed(2)}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </Card>
+            </div>
           </div>
         </div>
-      </Layout>
-    </RoleProtectedRoute>
+      </div>
+    </DashboardLayout>
   );
 }
