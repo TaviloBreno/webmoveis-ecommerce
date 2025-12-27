@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import Layout from "@/components/layout/Layout";
 import Card, { CardBody, CardHeader } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
@@ -8,7 +9,7 @@ import Input from "@/components/ui/Input";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { userService } from "@/services/other.service";
-import { User, Lock, Award } from "lucide-react";
+import { User, Lock, Award, MapPin } from "lucide-react";
 
 export default function PerfilPage() {
   const { user, setAuth } = useAuthStore();
@@ -148,6 +149,13 @@ export default function PerfilPage() {
                 <Award size={20} />
                 <span>Programa de Fidelidade</span>
               </button>
+              <Link
+                href="/perfil/enderecos"
+                className="w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 hover:bg-gray-100"
+              >
+                <MapPin size={20} />
+                <span>Meus Endereços</span>
+              </Link>
             </div>
 
             {/* Content */}

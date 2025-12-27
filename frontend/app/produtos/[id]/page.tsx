@@ -286,11 +286,23 @@ export default function ProductDetailPage() {
                 )}
               </Button>
               <Button
+                onClick={handleToggleWishlist}
+                disabled={togglingWishlist}
                 variant="outline"
                 size="lg"
-                className="border-2 hover:bg-red-50 hover:border-red-500"
+                className={`border-2 transition-colors ${
+                  isInWishlistStore(product.id)
+                    ? "bg-red-50 border-red-500 hover:bg-red-100"
+                    : "hover:bg-red-50 hover:border-red-500"
+                }`}
+                title={isInWishlistStore(product.id) ? "Remover da lista de desejos" : "Adicionar à lista de desejos"}
               >
-                <Heart size={20} className="text-red-500" />
+                <Heart 
+                  size={20} 
+                  className={`text-red-500 transition-all ${
+                    isInWishlistStore(product.id) ? "fill-red-500" : ""
+                  }`}
+                />
               </Button>
             </div>
 
