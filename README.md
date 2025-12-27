@@ -46,8 +46,113 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 - Criptografia de senhas com Bcrypt
 - Proteção de rotas com Guards
 - Validação de dados com class-validator
+- Controle de acesso baseado em roles (admin/customer)
 
 ### 👤 **Gestão de Usuários**
+- CRUD completo de usuários
+- Perfis de usuário personalizáveis
+- Sistema de roles (admin/customer)
+- Gerenciamento de múltiplos endereços
+- Lista de desejos (wishlist) personalizada
+
+### 📦 **Catálogo de Produtos**
+- Listagem com paginação e filtros
+- **Busca avançada** por texto, preço e categoria
+- Ordenação por preço, nome e data
+- Sistema de categorias hierárquicas
+- Múltiplas imagens por produto
+- Sistema de avaliações e ratings
+- Cálculo automático de média de avaliações
+
+### 🛒 **Carrinho & Checkout**
+- Carrinho de compras persistente
+- Cálculo automático de subtotal
+- Validação de estoque em tempo real
+- Sistema de cupons e descontos
+- Aplicação de descontos percentuais e fixos
+- Checkout com múltiplas formas de pagamento
+
+### 💳 **Pagamentos**
+- Integração completa com PagSeguro
+- Suporte a cartões de crédito
+- Processamento de PIX
+- Validação de valores e produtos
+- Webhooks para atualização de status
+
+### 📮 **Gestão de Pedidos**
+- Criação e rastreamento de pedidos
+- Status automatizados (pending → paid → processing → shipped → delivered)
+- Histórico completo de pedidos
+- Itens do pedido com preços históricos
+- Cálculo de frete integrado
+- Dashboard administrativo de pedidos
+
+### 🚚 **Frete & Endereços**
+- Cálculo de frete via API
+- **Múltiplos endereços** por usuário
+- Definição de endereço padrão
+- Validação de CEP e dados
+- Suporte a diferentes transportadoras
+
+### ⭐ **Avaliações & Ratings**
+- Sistema de reviews com notas de 1-5
+- Comentários em produtos
+- Moderação de avaliações (aprovação/rejeição)
+- Cálculo automático de média
+- Validação: 1 avaliação por usuário/produto
+- Filtro de avaliações aprovadas
+
+### 🎟️ **Cupons & Descontos**
+- Criação de cupons de desconto
+- Tipos: percentual ou valor fixo
+- Validação de data de validade
+- Limite de uso e compra mínima
+- Desconto máximo configurável
+- Códigos únicos por cupom
+
+### ❤️ **Lista de Desejos**
+- Adicionar/remover produtos favoritos
+- Listagem com detalhes completos
+- Limpeza de lista
+- Validação de duplicatas
+
+### 💬 **Suporte & Atendimento**
+- Sistema de tickets de suporte
+- Mensagens em tempo real
+- Status (open/pending/resolved/closed)
+- Prioridades (low/medium/high/urgent)
+- Painel separado admin/customer
+- Histórico completo de conversas
+
+### 👨‍💼 **Painel Administrativo**
+- Dashboard com estatísticas gerais
+- CRUD de produtos e categorias
+- Gestão de pedidos e status
+- Gerenciamento de usuários
+- Controle de roles
+- Moderação de avaliações
+- Gestão de cupons
+
+### 📊 **Analytics & Relatórios**
+- Relatórios de vendas por período
+- Top produtos mais vendidos
+- Estatísticas por categoria
+- Evolução de receita no tempo
+- Métricas de clientes (total de pedidos, valor gasto)
+- Análise de ticket médio
+
+### 📧 **Notificações**
+- E-mails transacionais automatizados
+- Confirmação de pedidos
+- Atualizações de status
+- Recuperação de senha
+- Templates HTML profissionais
+
+### 🔄 **Mensageria Assíncrona**
+- Kafka para comunicação entre serviços
+- Eventos de pedidos (criação, pagamento, status)
+- Processamento assíncrono de e-mails
+- Escalabilidade horizontal
 - Perfis completos de usuário
 - Atualização de informações pessoais
 - Alteração segura de senha

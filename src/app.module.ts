@@ -12,6 +12,13 @@ import { KafkaModule } from './kafka/kafka.module';
 import { EmailModule } from './email/email.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CartModule } from './cart/cart.module';
+import { AddressesModule } from './addresses/addresses.module';
+import { ReviewsModule } from './reviews/reviews.module';
+import { CouponsModule } from './coupons/coupons.module';
+import { WishlistModule } from './wishlist/wishlist.module';
+import { SupportModule } from './support/support.module';
+import { AdminModule } from './admin/admin.module';
+import { AnalyticsModule } from './analytics/analytics.module';
 
 @Module({
   imports: [
@@ -27,6 +34,13 @@ import { CartModule } from './cart/cart.module';
     CartModule,
     OrdersModule,
     PaymentsModule,
+    AddressesModule,
+    ReviewsModule,
+    CouponsModule,
+    WishlistModule,
+    SupportModule,
+    AdminModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [],
