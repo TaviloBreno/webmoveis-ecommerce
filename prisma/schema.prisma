@@ -17,6 +17,58 @@ model Category{
   id Int @id @default(autoincrement())
   name String
   image_url String
+  products Product[]
 
   @@map("category")
+}
+
+model Store {
+  id Int @id @default(autoincrement())
+  name String
+  description String?
+  email String @unique
+  phone String
+  address String
+  city String
+  state String
+  zip_code String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  products Product[]
+
+  @@map("store")
+}
+
+model Product {
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  price Float
+  stock Int @default(0)
+  category_id Int
+  store_id Int
+  weight Float?
+  width Float?
+  height Float?
+  length Float?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  category Category @relation(fields: [category_id], references: [id])
+  store Store @relation(fields: [store_id], references: [id])
+  images ProductImage[]
+
+  @@map("product")
+}
+
+model ProductImage {
+  id Int @id @default(autoincrement())
+  product_id Int
+  image_url String
+  is_primary Boolean @default(false)
+  created_at DateTime @default(now())
+  
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@map("product_image")
 }
