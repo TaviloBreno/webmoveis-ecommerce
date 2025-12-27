@@ -209,9 +209,9 @@ export default function CheckoutPage() {
           <p className="text-neutral-600 mb-8">
             Adicione produtos ao carrinho para fazer o checkout
           </p>
-          <Button asChild>
-            <Link href="/produtos">Ver Produtos</Link>
-          </Button>
+          <Link href="/produtos">
+            <Button>Ver Produtos</Button>
+          </Link>
         </div>
       </Layout>
     );
@@ -584,9 +584,9 @@ export default function CheckoutPage() {
                       <p className="text-neutral-600 mb-8">
                         Você receberá um e-mail com os detalhes do seu pedido.
                       </p>
-                      <Button asChild>
-                        <Link href="/pedidos">Ver Meus Pedidos</Link>
-                      </Button>
+                      <Link href="/pedidos">
+                        <Button>Ver Meus Pedidos</Button>
+                      </Link>
                     </Card>
                   </motion.div>
                 )}

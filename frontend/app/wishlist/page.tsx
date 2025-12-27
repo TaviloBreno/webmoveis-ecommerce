@@ -169,9 +169,9 @@ export default function WishlistPage() {
               <p className="text-neutral-600 mb-8">
                 Explore nossos produtos e adicione seus favoritos aqui
               </p>
-              <Button asChild>
-                <Link href="/produtos">Ver Produtos</Link>
-              </Button>
+              <Link href="/produtos">
+                <Button>Ver Produtos</Button>
+              </Link>
             </motion.div>
           ) : (
             <>
@@ -268,16 +268,15 @@ export default function WishlistPage() {
                                   </>
                                 )}
                               </Button>
-                              <Button
-                                asChild
-                                variant="outline"
-                                size="sm"
-                                className="flex-1"
-                              >
-                                <Link href={`/produtos/${item.product.id}`}>
+                              <Link href={`/produtos/${item.product.id}`} className="flex-1">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full"
+                                >
                                   Ver Detalhes
-                                </Link>
-                              </Button>
+                                </Button>
+                              </Link>
                             </>
                           ) : (
                             <Button disabled className="flex-1" size="sm">
@@ -311,12 +310,12 @@ export default function WishlistPage() {
                 <p className="text-neutral-600 mb-6">
                   Continue explorando nossa loja e descubra mais produtos incríveis
                 </p>
-                <Button asChild size="lg">
-                  <Link href="/produtos">
+                <Link href="/produtos">
+                  <Button size="lg">
                     <ShoppingCart size={20} className="mr-2" />
                     Continuar Comprando
-                  </Link>
-                </Button>
+                  </Button>
+                </Link>
               </motion.div>
             </>
           )}

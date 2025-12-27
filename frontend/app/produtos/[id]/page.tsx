@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
   }
 
   const images = product.images?.length > 0 
-    ? product.images.map((img: any) => img.url)
+    ? product.images.map((image: any) => image.url)
     : [
         `https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=800`,
         `https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=800`,
