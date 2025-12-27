@@ -26,7 +26,7 @@ export class ReturnsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   createReturn(@Request() req, @Body() createReturnDto: CreateReturnDto) {
-    return this.returnsService.createReturn(req.user.userId, createReturnDto);
+    return this.returnsService.createReturn(req.user.id, createReturnDto);
   }
 
   @Get('my-returns')
@@ -34,7 +34,7 @@ export class ReturnsController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   getMyReturns(@Request() req) {
-    return this.returnsService.getUserReturns(req.user.userId);
+    return this.returnsService.getUserReturns(req.user.id);
   }
 
   @Get('admin/list')
@@ -70,7 +70,7 @@ export class ReturnsController {
   @UseGuards(JwtAuthGuard)
   @ApiParam({ name: 'returnId', type: Number })
   getReturnDetails(@Request() req, @Param('returnId', ParseIntPipe) returnId: number) {
-    return this.returnsService.getReturnDetails(returnId, req.user.userId);
+    return this.returnsService.getReturnDetails(returnId, req.user.id);
   }
 
   @Patch(':returnId/status')
@@ -91,6 +91,6 @@ export class ReturnsController {
   @UseGuards(JwtAuthGuard)
   @ApiParam({ name: 'returnId', type: Number })
   cancelReturn(@Request() req, @Param('returnId', ParseIntPipe) returnId: number) {
-    return this.returnsService.cancelReturn(returnId, req.user.userId);
+    return this.returnsService.cancelReturn(returnId, req.user.id);
   }
 }

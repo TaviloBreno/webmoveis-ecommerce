@@ -26,7 +26,7 @@ export class ReviewsController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Criar avaliação de produto' })
   create(@Request() req, @Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(req.user.userId, createReviewDto);
+    return this.reviewsService.create(req.user.id, createReviewDto);
   }
 
   @Get('product/:productId')
@@ -69,6 +69,6 @@ export class ReviewsController {
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Remover avaliação' })
   remove(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    return this.reviewsService.remove(req.user.userId, id);
+    return this.reviewsService.remove(req.user.id, id);
   }
 }

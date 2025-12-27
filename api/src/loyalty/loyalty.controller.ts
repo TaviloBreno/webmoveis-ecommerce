@@ -32,7 +32,7 @@ export class LoyaltyController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   redeemPoints(@Request() req, @Body() redeemDto: RedeemPointsDto) {
-    return this.loyaltyService.redeemPoints(req.user.userId, redeemDto);
+    return this.loyaltyService.redeemPoints(req.user.id, redeemDto);
   }
 
   @Post('transfer')
@@ -40,7 +40,7 @@ export class LoyaltyController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   transferPoints(@Request() req, @Body() transferDto: TransferPointsDto) {
-    return this.loyaltyService.transferPoints(req.user.userId, transferDto);
+    return this.loyaltyService.transferPoints(req.user.id, transferDto);
   }
 
   @Get('balance')
@@ -48,7 +48,7 @@ export class LoyaltyController {
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   getBalance(@Request() req) {
-    return this.loyaltyService.getBalance(req.user.userId);
+    return this.loyaltyService.getBalance(req.user.id);
   }
 
   @Get('balance/:userId')
@@ -65,7 +65,7 @@ export class LoyaltyController {
   @UseGuards(JwtAuthGuard)
   @ApiQuery({ name: 'limit', required: false, type: Number })
   getHistory(@Request() req, @Query('limit') limit?: number) {
-    return this.loyaltyService.getHistory(req.user.userId, limit ? +limit : 50);
+    return this.loyaltyService.getHistory(req.user.id, limit ? +limit : 50);
   }
 
   @Get('calculate/:amount')

@@ -26,19 +26,19 @@ export class AddressesController {
   @Post()
   @ApiOperation({ summary: 'Criar novo endereço' })
   create(@Request() req, @Body() createAddressDto: CreateAddressDto) {
-    return this.addressesService.create(req.user.userId, createAddressDto);
+    return this.addressesService.create(req.user.id, createAddressDto);
   }
 
   @Get()
   @ApiOperation({ summary: 'Listar endereços do usuário' })
   findAll(@Request() req) {
-    return this.addressesService.findAll(req.user.userId);
+    return this.addressesService.findAll(req.user.id);
   }
 
   @Get(':id')
   @ApiOperation({ summary: 'Obter endereço por ID' })
   findOne(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    return this.addressesService.findOne(req.user.userId, id);
+    return this.addressesService.findOne(req.user.id, id);
   }
 
   @Put(':id')
@@ -48,18 +48,18 @@ export class AddressesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateAddressDto: UpdateAddressDto,
   ) {
-    return this.addressesService.update(req.user.userId, id, updateAddressDto);
+    return this.addressesService.update(req.user.id, id, updateAddressDto);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Remover endereço' })
   remove(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    return this.addressesService.remove(req.user.userId, id);
+    return this.addressesService.remove(req.user.id, id);
   }
 
   @Patch(':id/set-default')
   @ApiOperation({ summary: 'Definir endereço como padrão' })
   setDefault(@Request() req, @Param('id', ParseIntPipe) id: number) {
-    return this.addressesService.setDefault(req.user.userId, id);
+    return this.addressesService.setDefault(req.user.id, id);
   }
 }

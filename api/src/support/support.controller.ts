@@ -14,7 +14,7 @@ export class SupportController {
   @Post('tickets')
   @ApiOperation({ summary: 'Criar ticket de suporte' })
   createTicket(@Request() req, @Body() createTicketDto: CreateSupportTicketDto) {
-    return this.supportService.createTicket(req.user.userId, createTicketDto);
+    return this.supportService.createTicket(req.user.id, createTicketDto);
   }
 
   @Get('tickets')
@@ -22,7 +22,7 @@ export class SupportController {
   @ApiQuery({ name: 'status', required: false })
   findAll(@Request() req, @Query('status') status?: string) {
     // Se for admin, lista todos, senão apenas os do usuário
-    return this.supportService.findAll(req.user.userId, status);
+    return this.supportService.findAll(req.user.id, status);
   }
 
   @Get('tickets/:id')
@@ -38,7 +38,7 @@ export class SupportController {
     @Request() req,
     @Body() sendMessageDto: SendMessageDto,
   ) {
-    return this.supportService.sendMessage(id, req.user.userId, sendMessageDto);
+    return this.supportService.sendMessage(id, req.user.id, sendMessageDto);
   }
 
   @Patch('tickets/:id/status')
