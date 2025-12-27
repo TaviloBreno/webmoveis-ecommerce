@@ -50,47 +50,46 @@ export class UploadService {
     });
 
     if (!product) {
-      throw new BadRequestException('Produto não encontrado');
+      throw new NotFoundException('Produto não encontrado');
     }
 
-    // Se marcar como primária, desmarcar outras
+    // Se for imagem principal, remover flag das outras
     if (isPrimary) {
       await this.prisma.productImage.updateMany({
-        where: { product_id: productId, is_primary: true },
+        where: { product_id: productId },
         data: { is_primary: false },
       });
     }
 
-    // Gerar URL da imagem
-    const imageUrl = `/uploads/products/${file.filename}`;
+    // Salvar arquivo
+    const fileName = `product_${productId}_${Date.now()}${path.extname(file.originalname)}`;
+    const filePath = path.join(this.uploadDir, fileName);
+    fs.writeFileSync(filePath, file.buffer);
 
-    // Salvar no banco
-    const productImage = await this.prisma.productImage.create({
+    // Criar registro no banco
+    const image = await this.prisma.productImage.create({
       data: {
         product_id: productId,
-        image_url: imageUrl,
+        image_url: `/uploads/${fileName}`,
         is_primary: isPrimary,
       },
     });
 
     return {
-      id: productImage.id,
-      url: imageUrl,
-      is_primary: isPrimary,
+      id: image.id,
+      url: image.image_url,
+      is_primary: image.is_primary,
       message: 'Imagem enviada com sucesso',
     };
   }
 
   // Upload múltiplo de imagens
-  async uploadMultipleProductImages(
-    files: Express.Multer.File[],
-    productId: number,
-  ) {
+  async uploadMultipleImages(productId: number, files: Express.Multer.File[]) {
     if (!files || files.length === 0) {
-      throw new BadRequestException('Nenhum arquivo foi enviado');
+      throw new BadRequestException('Nenhum arquivo enviado');
     }
 
-    // Validar todos os arquivos
+    // Validar todos os arquivos primeiro
     files.forEach((file) => this.validateFile(file));
 
     const product = await this.prisma.product.findUnique({
@@ -98,67 +97,69 @@ export class UploadService {
     });
 
     if (!product) {
-      throw new BadRequestException('Produto não encontrado');
+      throw new NotFoundException('Produto não encontrado');
     }
 
-    // Verificar se já existe imagem primária
-    const existingPrimary = await this.prisma.productImage.findFirst({
-      where: { product_id: productId, is_primary: true },
-    });
+    this.ensureUploadDir();
 
     const uploadedImages = [];
 
-    for (let i = 0; i < files.length; i++) {
-      const file = files[i];
-      const imageUrl = `/uploads/products/${file.filename}`;
-      const isPrimary = !existingPrimary && i === 0;
+    for (const file of files) {
+      const fileName = `product_${productId}_${Date.now()}_${Math.random().toString(36).substring(7)}${path.extname(file.originalname)}`;
+      const filePath = path.join(this.uploadDir, fileName);
+      fs.writeFileSync(filePath, file.buffer);
 
-      const productImage = await this.prisma.productImage.create({
+      const image = await this.prisma.productImage.create({
         data: {
           product_id: productId,
-          image_url: imageUrl,
-          is_primary: isPrimary,
+          image_url: `/uploads/${fileName}`,
+          is_primary: false,
         },
       });
 
       uploadedImages.push({
-        id: productImage.id,
-        url: imageUrl,
-        is_primary: isPrimary,
+        id: image.id,
+        url: image.image_url,
       });
     }
 
     return {
-      message: `${uploadedImages.length} imagens enviadas com sucesso`,
+      count: uploadedImages.length,
       images: uploadedImages,
+      message: `${uploadedImages.length} imagens enviadas com sucesso`,
     };
   }
 
-  // Definir imagem primária
-  async setPrimaryImage(imageId: number) {
-    const image = await this.prisma.productImage.findUnique({
-      where: { id: imageId },
+  // Definir imagem principal
+  async setPrimaryImage(productId: number, imageId: number) {
+    const image = await this.prisma.productImage.findFirst({
+      where: {
+        id: imageId,
+        product_id: productId,
+      },
     });
 
     if (!image) {
-      throw new BadRequestException('Imagem não encontrada');
+      throw new NotFoundException('Imagem não encontrada');
     }
 
-    // Desmarcar outras primárias do mesmo produto
+    // Remover flag das outras imagens
     await this.prisma.productImage.updateMany({
-      where: { product_id: image.product_id, is_primary: true },
+      where: { product_id: productId },
       data: { is_primary: false },
     });
 
-    // Marcar como primária
-    const updatedImage = await this.prisma.productImage.update({
+    // Definir nova imagem principal
+    const updated = await this.prisma.productImage.update({
       where: { id: imageId },
       data: { is_primary: true },
     });
 
     return {
+      id: updated.id,
+      url: updated.image_url,
+      is_primary: updated.is_primary,
       message: 'Imagem principal atualizada',
-      image: updatedImage,
     };
   }
 
@@ -169,7 +170,7 @@ export class UploadService {
     });
 
     if (!image) {
-      throw new BadRequestException('Imagem não encontrada');
+      throw new NotFoundException('Imagem não encontrada');
     }
 
     // Deletar arquivo físico
@@ -178,7 +179,7 @@ export class UploadService {
       fs.unlinkSync(filePath);
     }
 
-    // Deletar do banco
+    // Deletar registro
     await this.prisma.productImage.delete({
       where: { id: imageId },
     });
@@ -195,19 +196,52 @@ export class UploadService {
       orderBy: [{ is_primary: 'desc' }, { created_at: 'asc' }],
     });
 
-    return images;
+    return {
+      product_id: productId,
+      count: images.length,
+      images,
+    };
   }
 
-  // Criar diretório de upload se não existir
-  ensureUploadDirectoryExists() {
-    const productsDir = path.join(this.uploadPath, 'products');
-
-    if (!fs.existsSync(this.uploadPath)) {
-      fs.mkdirSync(this.uploadPath);
+  // Obter estatísticas de armazenamento
+  async getStorageStats() {
+    const totalImages = await this.prisma.productImage.count();
+    
+    let totalSize = 0;
+    if (fs.existsSync(this.uploadDir)) {
+      const files = fs.readdirSync(this.uploadDir);
+      
+      files.forEach((file) => {
+        const filePath = path.join(this.uploadDir, file);
+        if (fs.existsSync(filePath)) {
+          const stats = fs.statSync(filePath);
+          totalSize += stats.size;
+        }
+      });
     }
 
-    if (!fs.existsSync(productsDir)) {
-      fs.mkdirSync(productsDir, { recursive: true });
-    }
+    const productsWithImages = await this.prisma.product.count({
+      where: {
+        images: {
+          some: {},
+        },
+      },
+    });
+
+    const productsWithoutImages = await this.prisma.product.count({
+      where: {
+        images: {
+          none: {},
+        },
+      },
+    });
+
+    return {
+      total_images: totalImages,
+      total_size_bytes: totalSize,
+      total_size_mb: (totalSize / 1024 / 1024).toFixed(2),
+      products_with_images: productsWithImages,
+      products_without_images: productsWithoutImages,
+    };
   }
 }
