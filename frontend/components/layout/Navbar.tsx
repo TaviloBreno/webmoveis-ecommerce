@@ -106,6 +106,22 @@ export default function Navbar() {
             >
               Produtos
             </Link>
+            <Link
+              href="/sobre"
+              className={`text-gray-700 hover:text-blue-600 transition-colors ${
+                isActive("/sobre") ? "text-blue-600 font-semibold" : ""
+              }`}
+            >
+              Sobre
+            </Link>
+            <Link
+              href="/contatos"
+              className={`text-gray-700 hover:text-blue-600 transition-colors ${
+                isActive("/contatos") ? "text-blue-600 font-semibold" : ""
+              }`}
+            >
+              Contatos
+            </Link>
 
             {isAuthenticated ? (
               <>
