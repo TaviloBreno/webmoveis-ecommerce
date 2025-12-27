@@ -7,8 +7,10 @@ import Layout from "@/components/layout/Layout";
 import Button from "@/components/ui/Button";
 import { productService } from "@/services/product.service";
 import { cartService } from "@/services/cart.service";
+import { wishlistService } from "@/services/wishlist.service";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
+import { useWishlistStore } from "@/lib/store/wishlist-store";
 import { formatCurrency } from "@/lib/utils";
 import { 
   ShoppingCart, 
@@ -28,12 +30,14 @@ export default function ProductDetailPage() {
   const router = useRouter();
   const { isAuthenticated } = useAuthStore();
   const { updateItemCount } = useCartStore();
+  const { isInWishlistStore, addToWishlistStore, removeFromWishlistStore } = useWishlistStore();
 
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [togglingWishlist, setTogglingWishlist] = useState(false);
 
   useEffect(() => {
     loadProduct();
@@ -67,6 +71,31 @@ export default function ProductDetailPage() {
       alert("Erro ao adicionar ao carrinho");
     } finally {
       setAddingToCart(false);
+    }
+  };
+
+  const handleToggleWishlist = async () => {
+    if (!isAuthenticated) {
+      router.push("/login");
+      return;
+    }
+
+    setTogglingWishlist(true);
+    try {
+      const isInWishlist = isInWishlistStore(product.id);
+      
+      if (isInWishlist) {
+        await wishlistService.removeFromWishlist(product.id);
+        removeFromWishlistStore(product.id);
+      } else {
+        await wishlistService.addToWishlist(product.id);
+        addToWishlistStore(product.id);
+      }
+    } catch (error) {
+      console.error("Erro ao gerenciar wishlist:", error);
+      alert("Erro ao atualizar lista de desejos");
+    } finally {
+      setTogglingWishlist(false);
     }
   };
 
