@@ -8,7 +8,7 @@ import { useAuthStore } from "@/lib/store/auth-store";
 import { authService } from "@/services/auth.service";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { Mail, Lock, AlertCircle, User } from "lucide-react";
+import { Mail, Lock, AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,19 +59,6 @@ export default function LoginPage() {
           <p className="text-gray-600 mt-2">
             Acesse sua conta na WebMoveis
           </p>
-        </div>
-
-        {/* Demo Users Info */}
-        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-sm font-semibold text-blue-900 mb-2 flex items-center">
-            <User size={16} className="mr-2" />
-            Usuários de Teste:
-          </p>
-          <div className="space-y-1 text-xs text-blue-800">
-            <p><strong>Admin:</strong> admin@webmoveis.com | Senha: admin123</p>
-            <p><strong>Funcionário:</strong> func@webmoveis.com | Senha: func123</p>
-            <p><strong>Cliente:</strong> cliente@webmoveis.com | Senha: cliente123</p>
-          </div>
         </div>
 
         {error && (
