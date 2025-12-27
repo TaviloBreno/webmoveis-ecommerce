@@ -21,7 +21,12 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
   }
 
   async onModuleInit() {
-    await this.producer.connect();
+    try {
+      await this.producer.connect();
+      console.log('✅ Kafka conectado com sucesso');
+    } catch (error) {
+      console.warn('⚠️  Kafka não disponível. Sistema funcionará sem mensageria.');
+    }
   }
 
   async onModuleDestroy() {
@@ -43,9 +48,9 @@ export class KafkaService implements OnModuleInit, OnModuleDestroy {
           },
         ],
       });
-    } catch (error) {
-      console.error('Error publishing message to Kafka:', error);
-      throw error;
+    } catch (error: any) {
+      console.warn('⚠️  Erro ao publicar mensagem no Kafka (serviço offline):', error?.message || error);
+      // Não lança erro para não quebrar a aplicação
     }
   }
 

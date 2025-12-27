@@ -2,14 +2,14 @@ import { Injectable, BadRequestException, NotFoundException } from '@nestjs/comm
 import { PrismaService } from '../prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { EmailService } from '../email/email.service';
-import { KafkaService } from '../kafka/kafka.service';
+// import { KafkaService } from '../kafka/kafka.service'; // Desabilitado temporariamente
 
 @Injectable()
 export class OrdersService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly emailService: EmailService,
-    private readonly kafkaService: KafkaService,
+    // private readonly kafkaService: KafkaService, // Desabilitado temporariamente
   ) {}
 
   async createOrder(userId: number, createOrderDto: CreateOrderDto) {
@@ -114,17 +114,17 @@ export class OrdersService {
       }).catch(err => console.error('Failed to send order confirmation email:', err));
     }
 
-    // Publica evento no Kafka
-    this.kafkaService.publish('order-created', {
-      orderId: order.id,
-      userId,
-      total: order.total,
-      items: order.items.map(item => ({
-        productId: item.product_id,
-        quantity: item.quantity,
-      })),
-      timestamp: new Date().toISOString(),
-    }).catch(err => console.error('Failed to publish to Kafka:', err));
+    // Publica evento no Kafka (Desabilitado temporariamente)
+    // this.kafkaService.publish('order-created', {
+    //   orderId: order.id,
+    //   userId,
+    //   total: order.total,
+    //   items: order.items.map(item => ({
+    //     productId: item.product_id,
+    //     quantity: item.quantity,
+    //   })),
+    //   timestamp: new Date().toISOString(),
+    // }).catch(err => console.error('Failed to publish to Kafka:', err));
 
     return order;
   }

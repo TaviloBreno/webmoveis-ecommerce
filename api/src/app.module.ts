@@ -8,7 +8,7 @@ import { ShippingModule } from './shipping/shipping.module';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { OrdersModule } from './orders/orders.module';
-import { KafkaModule } from './kafka/kafka.module';
+// import { KafkaModule } from './kafka/kafka.module'; // Desabilitado temporariamente
 import { EmailModule } from './email/email.module';
 import { PaymentsModule } from './payments/payments.module';
 import { CartModule } from './cart/cart.module';
@@ -27,7 +27,7 @@ import { UploadModule } from './upload/upload.module';
 @Module({
   imports: [
     ConfigModule.forRoot(),
-    KafkaModule,
+    // KafkaModule, // Desabilitado temporariamente
     EmailModule,
     CategoriesModule,
     ProductsModule,

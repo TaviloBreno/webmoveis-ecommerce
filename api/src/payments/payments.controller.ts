@@ -3,7 +3,7 @@ import { PagSeguroService } from './pagseguro.service';
 import { CreatePaymentDto, PaymentNotificationDto } from './dto/payment.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiBody, ApiBearerAuth } from '@nestjs/swagger';
-import { KafkaService } from '../kafka/kafka.service';
+// import { KafkaService } from '../kafka/kafka.service'; // Desabilitado temporariamente
 import { EmailService } from '../email/email.service';
 
 @ApiTags('payments')
@@ -11,7 +11,7 @@ import { EmailService } from '../email/email.service';
 export class PaymentsController {
   constructor(
     private readonly pagSeguroService: PagSeguroService,
-    private readonly kafkaService: KafkaService,
+    // private readonly kafkaService: KafkaService, // Desabilitado temporariamente
     private readonly emailService: EmailService,
   ) {}
 
@@ -37,12 +37,12 @@ export class PaymentsController {
       ],
     });
 
-    // Publica evento no Kafka
-    await this.kafkaService.publish('payment-created', {
-      orderId: createPaymentDto.orderId,
-      checkoutCode: payment.checkoutCode,
-      timestamp: new Date().toISOString(),
-    });
+    // Publica evento no Kafka (Desabilitado temporariamente)
+    // await this.kafkaService.publish('payment-created', {
+    //   orderId: createPaymentDto.orderId,
+    //   checkoutCode: payment.checkoutCode,
+    //   timestamp: new Date().toISOString(),
+    // });
 
     return payment;
   }
@@ -62,13 +62,13 @@ export class PaymentsController {
       notificationDto.notificationCode,
     );
 
-    // Publica evento no Kafka
-    await this.kafkaService.publish('payment-status-updated', {
-      orderId: paymentStatus.orderId,
-      status: paymentStatus.status,
-      statusCode: paymentStatus.statusCode,
-      timestamp: new Date().toISOString(),
-    });
+    // Publica evento no Kafka (Desabilitado temporariamente)
+    // await this.kafkaService.publish('payment-status-updated', {
+    //   orderId: paymentStatus.orderId,
+    //   status: paymentStatus.status,
+    //   statusCode: paymentStatus.statusCode,
+    //   timestamp: new Date().toISOString(),
+    // });
 
     // Envia e-mail se o pagamento foi confirmado
     if (paymentStatus.statusCode === 3) {
