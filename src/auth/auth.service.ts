@@ -2,6 +2,8 @@ import { Injectable, UnauthorizedException, ConflictException } from '@nestjs/co
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma.service';
 import { RegisterDto, LoginDto } from './dto/auth.dto';
+import { EmailService } from '../email/email.service';
+import { KafkaService } from '../kafka/kafka.service';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -9,6 +11,8 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly emailService: EmailService,
+    private readonly kafkaService: KafkaService,
   ) {}
 
   async register(registerDto: RegisterDto) {
