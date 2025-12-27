@@ -1,32 +1,56 @@
 <div align="center">
 
-# 🛒 WebMoveis E-commerce API
+# 🛒 WebMoveis E-commerce Platform
 
-### **Sistema de E-commerce Enterprise Completo**
+### **Sistema de E-commerce Enterprise Completo - Fullstack**
 
 [![Node.js](https://img.shields.io/badge/Node.js-v20+-green?logo=node.js)](https://nodejs.org/)
 [![NestJS](https://img.shields.io/badge/NestJS-v11+-E0234E?logo=nestjs)](https://nestjs.com/)
+[![Next.js](https://img.shields.io/badge/Next.js-16+-black?logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7+-blue?logo=typescript)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-336791?logo=postgresql)](https://www.postgresql.org/)
 [![Prisma](https://img.shields.io/badge/Prisma-6.5+-2D3748?logo=prisma)](https://www.prisma.io/)
+[![Tailwind](https://img.shields.io/badge/Tailwind-CSS-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![Kafka](https://img.shields.io/badge/Kafka-Enabled-231F20?logo=apache-kafka)](https://kafka.apache.org/)
 [![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
 [![Tests](https://img.shields.io/badge/tests-passing-brightgreen)](package.json)
 
-**API RESTful robusta e escalável para e-commerce, desenvolvida com as melhores práticas de arquitetura de software, incluindo integração com pagamentos, mensageria assíncrona e notificações por e-mail.**
+**Plataforma completa de e-commerce com backend RESTful (NestJS) e frontend moderno (Next.js + Tailwind CSS), desenvolvida com as melhores práticas de arquitetura de software.**
 
-[Documentação](#-documentação-da-api) • [Instalação](#-instalação) • [Recursos](#-recursos-principais) • [Tecnologias](#-stack-tecnológico)
+[Estrutura](#-estrutura-do-projeto) • [Instalação](#-instalação) • [Recursos](#-recursos-principais) • [Tecnologias](#-stack-tecnológico)
 
 ---
 
 </div>
 
+## 📁 Estrutura do Projeto
+
+Este é um **monorepo** que contém toda a plataforma de e-commerce:
+
+```
+webmoveis-ecommerce/
+├── api/                    # Backend - NestJS REST API
+│   ├── src/               # Código fonte da API
+│   ├── prisma/            # Schema e migrations do banco
+│   ├── test/              # Testes E2E
+│   └── package.json       # Dependências do backend
+│
+├── frontend/              # Frontend - Next.js + Tailwind CSS
+│   ├── app/               # App Router do Next.js
+│   ├── components/        # Componentes React
+│   ├── public/            # Arquivos estáticos
+│   └── package.json       # Dependências do frontend
+│
+└── README.md              # Documentação principal
+```
+
 ## 📋 Sobre o Projeto
 
-Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios **SOLID**, **Clean Architecture** e padrões de **Design Patterns**. A aplicação oferece uma solução enterprise-grade com recursos avançados de pagamento, comunicação assíncrona e notificações automatizadas.
+Sistema completo de e-commerce **fullstack** desenvolvido com **NestJS** (backend) e **Next.js** (frontend), seguindo princípios **SOLID**, **Clean Architecture** e padrões de **Design Patterns**. A aplicação oferece uma solução enterprise-grade com recursos avançados de pagamento, comunicação assíncrona e interface moderna e responsiva.
 
 ### 🎯 Destaques Técnicos
 
+**Backend (NestJS API)**
 - ✨ **Arquitetura Modular** com NestJS e TypeScript
 - 🔐 **Autenticação JWT** com refresh tokens
 - 💳 **Integração PagSeguro** para pagamentos seguros
@@ -34,8 +58,16 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 - 🔄 **Mensageria Kafka** para comunicação assíncrona
 - 🗄️ **Prisma ORM** com PostgreSQL
 - 📝 **Documentação Swagger** completa e interativa
-- 🧪 **Testes Unitários** com Jest (100+ testes)
+- 🧪 **Testes Unitários** com Jest (92+ testes)
 - 🚀 **Docker Ready** para deploy simplificado
+
+**Frontend (Next.js)**
+- ⚡ **Next.js 16** com App Router e Turbopack
+- 🎨 **Tailwind CSS** para estilização moderna
+- 📱 **Design Responsivo** mobile-first
+- 🔄 **Server Components** e Client Components
+- 🚀 **React Compiler** para otimização
+- 📦 **TypeScript** para type-safety
 
 ---
 
@@ -258,6 +290,7 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 | Categoria | Tecnologias |
 |-----------|------------|
 | **Backend** | ![NestJS](https://img.shields.io/badge/NestJS-E0234E?style=for-the-badge&logo=nestjs&logoColor=white) ![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=node.js&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white) |
+| **Frontend** | ![Next.js](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=next.js&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=react&logoColor=black) ![Tailwind](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white) |
 | **Database** | ![PostgreSQL](https://img.shields.io/badge/PostgreSQL-336791?style=for-the-badge&logo=postgresql&logoColor=white) ![Prisma](https://img.shields.io/badge/Prisma-2D3748?style=for-the-badge&logo=prisma&logoColor=white) |
 | **Mensageria** | ![Kafka](https://img.shields.io/badge/Apache_Kafka-231F20?style=for-the-badge&logo=apache-kafka&logoColor=white) |
 | **Pagamentos** | ![PagSeguro](https://img.shields.io/badge/PagSeguro-00A859?style=for-the-badge&logo=pagseguro&logoColor=white) |
@@ -270,7 +303,7 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 
 ---
 
-## 📦 Instalação
+## 📦 Instalação Rápida
 
 ### Pré-requisitos
 
@@ -281,7 +314,7 @@ Kafka >= 2.8 (opcional)
 npm ou yarn
 ```
 
-### Configuração
+### Instalação do Monorepo
 
 1. **Clone o repositório**
 ```bash
@@ -289,33 +322,35 @@ git clone https://github.com/TaviloBreno/webmoveis-ecommerce.git
 cd webmoveis-ecommerce
 ```
 
-2. **Instale as dependências**
+2. **Configure o Backend (API)**
 ```bash
+cd api
 npm install
-```
-
-3. **Configure as variáveis de ambiente**
-```bash
 cp .env.example .env
 # Edite o arquivo .env com suas configurações
-```
-
-4. **Execute as migrations do banco**
-```bash
 npx prisma migrate dev
 npx prisma generate
-```
-
-5. **Inicie o servidor**
-```bash
 npm run start:dev
 ```
 
-A API estará disponível em `http://localhost:3000` 🚀
+3. **Configure o Frontend (em outro terminal)**
+```bash
+cd frontend
+npm install
+echo "NEXT_PUBLIC_API_URL=http://localhost:3000" > .env.local
+npm run dev
+```
+
+4. **Acesse as aplicações**
+- 🔥 API: `http://localhost:3000`
+- 📝 Swagger Docs: `http://localhost:3000/api`
+- 🎨 Frontend: `http://localhost:3001`
 
 ---
 
 ## ⚙️ Variáveis de Ambiente
+
+### Backend (api/.env)
 
 ```env
 # Database
@@ -344,16 +379,23 @@ FRONTEND_URL="http://localhost:3001"
 API_URL="http://localhost:3000"
 ```
 
+### Frontend (frontend/.env.local)
+
+```env
+# API URL
+NEXT_PUBLIC_API_URL="http://localhost:3000"
+```
+
 ---
 
 ## 📚 Documentação da API
 
 ### Swagger UI Interativa
 
-Acesse a documentação completa e interativa em:
+Acesse a documentação completa e interativa do backend em:
 
 ```
-http://localhost:3000/docs
+http://localhost:3000/api
 ```
 
 ### Principais Endpoints
@@ -422,9 +464,12 @@ POST   /payments/pagseguro/notification   # Webhook PagSeguro
 
 ## 🧪 Testes
 
-O projeto possui cobertura abrangente de testes unitários:
+O projeto possui cobertura abrangente de testes unitários no backend:
 
 ```bash
+# Navegar para a pasta da API
+cd api
+
 # Executar todos os testes
 npm test
 
@@ -438,9 +483,9 @@ npm run test:cov
 npm run test:e2e
 ```
 
-### Cobertura de Testes
+### Cobertura de Testes (Backend)
 
-- ✅ **49+ testes** passando
+- ✅ **92+ testes** passando em 13 test suites
 - ✅ AuthService (8 testes)
 - ✅ UsersService (7 testes)
 - ✅ OrdersService (8 testes)
@@ -449,6 +494,10 @@ npm run test:e2e
 - ✅ KafkaService (3 testes)
 - ✅ PagSeguroService (3 testes)
 - ✅ CategoriesService (3 testes)
+- ✅ LoyaltyService (9 testes)
+- ✅ TrackingService (8 testes)
+- ✅ ReturnsService (11 testes)
+- ✅ UploadService (15 testes)
 
 ---
 
@@ -486,37 +535,85 @@ erDiagram
 
 ---
 
-## 🚀 Deploy
+## 🚀 Como Executar
 
-### Docker
+### Pré-requisitos
+- Node.js 20+
+- PostgreSQL 16+
+- Docker (opcional)
+- npm ou yarn
+
+### Backend (API)
 
 ```bash
-# Build da imagem
-docker build -t webmoveis-api .
+# 1. Navegar para a pasta da API
+cd api
 
-# Executar container
-docker run -p 3000:3000 --env-file .env webmoveis-api
+# 2. Instalar dependências
+npm install
+
+# 3. Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas credenciais
+
+# 4. Executar migrations
+npx prisma migrate dev
+
+# 5. (Opcional) Popular banco com dados de teste
+npx prisma db seed
+
+# 6. Iniciar servidor de desenvolvimento
+npm run start:dev
+
+# API disponível em: http://localhost:3000
+# Swagger docs em: http://localhost:3000/api
 ```
 
-### Docker Compose
+### Frontend (Next.js)
 
 ```bash
+# 1. Navegar para a pasta do frontend
+cd frontend
+
+# 2. Instalar dependências
+npm install
+
+# 3. Configurar variáveis de ambiente
+echo "NEXT_PUBLIC_API_URL=http://localhost:3000" > .env.local
+
+# 4. Iniciar servidor de desenvolvimento
+npm run dev
+
+# Frontend disponível em: http://localhost:3001
+```
+
+### Docker (Fullstack)
+
+```bash
+# Subir toda a stack (API + Frontend + PostgreSQL + Kafka)
 docker-compose up -d
 ```
 
 ---
 
-## 📈 Melhorias Futuras
+## 📈 Roadmap
 
+### Frontend (Em desenvolvimento)
+- [ ] Interface de catálogo de produtos
+- [ ] Carrinho de compras interativo
+- [ ] Checkout e pagamento
+- [ ] Painel de usuário
+- [ ] Dashboard administrativo
+- [ ] Sistema de reviews e avaliações
+
+### Backend (Melhorias Futuras)
 - [ ] Sistema de cache com Redis
 - [ ] Rate limiting e throttling
 - [ ] Métricas e monitoramento com Prometheus
 - [ ] Logs estruturados com Winston
 - [ ] GraphQL API
 - [ ] Internacionalização (i18n)
-- [ ] Sistema de reviews e avaliações
 - [ ] Recomendações com ML
-- [ ] Dashboard administrativo
 
 ---
 
