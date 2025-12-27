@@ -3,11 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { authService } from "@/services/auth.service";
 import Input from "@/components/ui/Input";
 import Button from "@/components/ui/Button";
-import { Mail, Lock, AlertCircle } from "lucide-react";
+import { Mail, Lock, AlertCircle, User } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -35,13 +36,42 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+    <div className="min-h-screen relative flex items-center justify-center px-4">
+      {/* Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1557821552-17105176677c?auto=format&fit=crop&q=80&w=2000"
+          alt="Login Background"
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-primary-900/90 via-secondary-900/85 to-primary-900/90"></div>
+      </div>
+
+      {/* Login Card */}
+      <div className="relative z-10 max-w-md w-full bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8">
         <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-primary-600 to-secondary-600 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-lg">
+            <span className="text-white font-bold text-2xl">WM</span>
+          </div>
           <h1 className="text-3xl font-bold text-gray-900">Entrar</h1>
           <p className="text-gray-600 mt-2">
             Acesse sua conta na WebMoveis
           </p>
+        </div>
+
+        {/* Demo Users Info */}
+        <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <p className="text-sm font-semibold text-blue-900 mb-2 flex items-center">
+            <User size={16} className="mr-2" />
+            Usuários de Teste:
+          </p>
+          <div className="space-y-1 text-xs text-blue-800">
+            <p><strong>Admin:</strong> admin@webmoveis.com | Senha: admin123</p>
+            <p><strong>Funcionário:</strong> func@webmoveis.com | Senha: func123</p>
+            <p><strong>Cliente:</strong> cliente@webmoveis.com | Senha: cliente123</p>
+          </div>
         </div>
 
         {error && (

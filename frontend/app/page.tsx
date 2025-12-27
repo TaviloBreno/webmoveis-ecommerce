@@ -110,13 +110,6 @@ export default function Home() {
           </motion.div>
         </div>
       </section>
-                  </div>
-                </div>
-              </motion.div>
-            </motion.div>
-          </div>
-        </div>
-      </section>
 
       {/* Features */}
       <section className="py-20 bg-gradient-to-b from-white to-neutral-50">
