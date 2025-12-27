@@ -1,10 +1,16 @@
 import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { CreateOrderDto } from './dto/create-order.dto';
+import { EmailService } from '../email/email.service';
+import { KafkaService } from '../kafka/kafka.service';
 
 @Injectable()
 export class OrdersService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+    private readonly kafkaService: KafkaService,
+  ) {}
 
   async createOrder(userId: number, createOrderDto: CreateOrderDto) {
     // Validar produtos e calcular total
@@ -88,6 +94,37 @@ export class OrdersService {
 
       return newOrder;
     });
+
+    // Busca dados do usuário para o e-mail
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+
+    // Envia e-mail de confirmação do pedido
+    if (user) {
+      this.emailService.sendOrderConfirmation(user.email, {
+        orderId: order.id,
+        customerName: user.name,
+        items: order.items.map(item => ({
+          name: item.product.name,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+        shippingCost: order.shipping_cost,
+        total: order.total,
+        address: `${order.shipping_address}, ${order.shipping_city} - ${order.shipping_state}`,
+      }).catch(err => console.error('Failed to send order confirmation email:', err));
+    }
+
+    // Publica evento no Kafka
+    this.kafkaService.publish('order-created', {
+      orderId: order.id,
+      userId,
+      total: order.total,
+      items: order.items.map(item => ({
+        productId: item.product_id,
+        quantity: item.quantity,
+      })),
+      timestamp: new Date().toISOString(),
+    }).catch(err => console.error('Failed to publish to Kafka:', err));
 
     return order;
   }

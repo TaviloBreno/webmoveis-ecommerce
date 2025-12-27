@@ -2,6 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { OrdersService } from './orders.service';
 import { PrismaService } from '../prisma.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { EmailService } from '../email/email.service';
+import { KafkaService } from '../kafka/kafka.service';
 
 describe('OrdersService', () => {
   let service: OrdersService;
@@ -12,6 +14,9 @@ describe('OrdersService', () => {
       findMany: jest.fn(),
       update: jest.fn(),
     },
+    user: {
+      findUnique: jest.fn(),
+    },
     order: {
       create: jest.fn(),
       findMany: jest.fn(),
@@ -20,11 +25,21 @@ describe('OrdersService', () => {
     $transaction: jest.fn(),
   };
 
+  const mockEmailService = {
+    sendOrderConfirmation: jest.fn().mockResolvedValue(undefined),
+  };
+
+  const mockKafkaService = {
+    publish: jest.fn().mockResolvedValue(undefined),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         OrdersService,
         { provide: PrismaService, useValue: mockPrismaService },
+        { provide: EmailService, useValue: mockEmailService },
+        { provide: KafkaService, useValue: mockKafkaService },
       ],
     }).compile();
 
@@ -76,6 +91,11 @@ describe('OrdersService', () => {
       };
 
       mockPrismaService.product.findMany.mockResolvedValue(products);
+      mockPrismaService.user.findUnique.mockResolvedValue({
+        id: userId,
+        email: 'test@example.com',
+        name: 'Test User',
+      });
       mockPrismaService.$transaction.mockImplementation(async (callback) => {
         return callback(mockPrismaService);
       });

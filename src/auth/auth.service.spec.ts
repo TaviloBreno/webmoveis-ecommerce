@@ -3,6 +3,8 @@ import { AuthService } from './auth.service';
 import { PrismaService } from '../prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConflictException, UnauthorizedException } from '@nestjs/common';
+import { KafkaService } from '../kafka/kafka.service';
+import { EmailService } from '../email/email.service';
 import * as bcrypt from 'bcrypt';
 
 describe('AuthService', () => {
@@ -21,12 +23,22 @@ describe('AuthService', () => {
     sign: jest.fn().mockReturnValue('mock-jwt-token'),
   };
 
+  const mockEmailService = {
+    sendWelcomeEmail: jest.fn(),
+  };
+
+  const mockKafkaService = {
+    publish: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         { provide: PrismaService, useValue: mockPrismaService },
         { provide: JwtService, useValue: mockJwtService },
+        { provide: EmailService, useValue: mockEmailService },
+        { provide: KafkaService, useValue: mockKafkaService },
       ],
     }).compile();
 
