@@ -50,6 +50,8 @@ model User {
   state String?
   zip_code String?
   role String @default("customer") // customer, admin
+  loyalty_points Int @default(0) // Pontos de fidelidade acumulados
+  loyalty_tier String @default("bronze") // bronze, silver, gold, platinum
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   orders Order[]
@@ -60,6 +62,8 @@ model User {
   notifications Notification[]
   support_tickets SupportTicket[]
   support_messages SupportMessage[]
+  loyalty_transactions LoyaltyTransaction[]
+  returns Return[]
 
   @@map("user")
 }
@@ -109,18 +113,23 @@ model Order {
   discount Float @default(0)
   coupon_code String?
   status String @default("pending")
+  tracking_code String? // Código de rastreamento da transportadora
   shipping_address String
   shipping_city String
   shipping_state String
   shipping_zip_code String
   shipping_cost Float
   shipping_method String
+  loyalty_points_earned Int @default(0) // Pontos ganhos neste pedido
+  loyalty_points_used Int @default(0) // Pontos utilizados neste pedido
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   
   user User @relation(fields: [user_id], references: [id])
   items OrderItem[]
   coupon Coupon? @relation(fields: [coupon_code], references: [code])
+  tracking_events OrderTrackingEvent[]
+  returns Return[]
 
   @@map("order")
 }
@@ -278,4 +287,68 @@ model SupportMessage {
   user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@map("support_message")
+}
+
+// Programa de Fidelidade
+model LoyaltyTransaction {
+  id Int @id @default(autoincrement())
+  user_id Int
+  type String // earned, redeemed, expired
+  points Int // Positivo para ganho, negativo para uso
+  description String
+  reference_type String? // order, review, referral
+  reference_id Int?
+  created_at DateTime @default(now())
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("loyalty_transaction")
+}
+
+// Rastreamento de Pedidos
+model OrderTrackingEvent {
+  id Int @id @default(autoincrement())
+  order_id Int
+  status String // order_placed, payment_confirmed, preparing, shipped, in_transit, out_for_delivery, delivered
+  location String?
+  description String
+  created_at DateTime @default(now())
+  
+  order Order @relation(fields: [order_id], references: [id], onDelete: Cascade)
+
+  @@map("order_tracking_event")
+}
+
+// Devolução e Troca
+model Return {
+  id Int @id @default(autoincrement())
+  order_id Int
+  user_id Int
+  type String // return, exchange
+  reason String
+  status String @default("requested") // requested, approved, rejected, received, processing, completed
+  refund_amount Float?
+  exchange_product_id Int?
+  admin_notes String?
+  requested_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  order Order @relation(fields: [order_id], references: [id])
+  user User @relation(fields: [user_id], references: [id])
+  items ReturnItem[]
+
+  @@map("return")
+}
+
+model ReturnItem {
+  id Int @id @default(autoincrement())
+  return_id Int
+  order_item_id Int
+  quantity Int
+  reason String
+  condition String? // unopened, used, damaged
+  
+  return Return @relation(fields: [return_id], references: [id], onDelete: Cascade)
+
+  @@map("return_item")
 }
