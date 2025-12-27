@@ -18,6 +18,7 @@ async function bootstrap() {
   const documentationConfig = new DocumentBuilder()
     .setTitle('WebMoveis API')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, documentationConfig);
   SwaggerModule.setup('docs', app, document);

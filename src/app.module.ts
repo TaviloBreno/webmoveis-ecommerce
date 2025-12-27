@@ -5,6 +5,9 @@ import { CategoriesModule } from './categories/categories.module';
 import { ProductsModule } from './products/products.module';
 import { StoresModule } from './stores/stores.module';
 import { ShippingModule } from './shipping/shipping.module';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './users/users.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -13,6 +16,9 @@ import { ShippingModule } from './shipping/shipping.module';
     ProductsModule,
     StoresModule,
     ShippingModule,
+    AuthModule,
+    UsersModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [],
