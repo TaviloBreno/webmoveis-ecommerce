@@ -11,6 +11,7 @@ import { OrdersModule } from './orders/orders.module';
 import { KafkaModule } from './kafka/kafka.module';
 import { EmailModule } from './email/email.module';
 import { PaymentsModule } from './payments/payments.module';
+import { CartModule } from './cart/cart.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PaymentsModule } from './payments/payments.module';
     ShippingModule,
     AuthModule,
     UsersModule,
+    CartModule,
     OrdersModule,
     PaymentsModule,
   ],

@@ -52,6 +52,7 @@ model User {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   orders Order[]
+  cart Cart?
 
   @@map("user")
 }
@@ -75,6 +76,7 @@ model Product {
   store Store @relation(fields: [store_id], references: [id])
   images ProductImage[]
   order_items OrderItem[]
+  cart_items CartItem[]
 
   @@map("product")
 }
@@ -122,4 +124,31 @@ model OrderItem {
   product Product @relation(fields: [product_id], references: [id])
 
   @@map("order_item")
+}
+
+model Cart {
+  id Int @id @default(autoincrement())
+  user_id Int @unique
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  items CartItem[]
+
+  @@map("cart")
+}
+
+model CartItem {
+  id Int @id @default(autoincrement())
+  cart_id Int
+  product_id Int
+  quantity Int
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  cart Cart @relation(fields: [cart_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id])
+
+  @@unique([cart_id, product_id])
+  @@map("cart_item")
 }
