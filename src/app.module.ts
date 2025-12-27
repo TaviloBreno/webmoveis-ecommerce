@@ -19,6 +19,10 @@ import { WishlistModule } from './wishlist/wishlist.module';
 import { SupportModule } from './support/support.module';
 import { AdminModule } from './admin/admin.module';
 import { AnalyticsModule } from './analytics/analytics.module';
+import { LoyaltyModule } from './loyalty/loyalty.module';
+import { TrackingModule } from './tracking/tracking.module';
+import { ReturnsModule } from './returns/returns.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -41,6 +45,10 @@ import { AnalyticsModule } from './analytics/analytics.module';
     SupportModule,
     AdminModule,
     AnalyticsModule,
+    LoyaltyModule,
+    TrackingModule,
+    ReturnsModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [],

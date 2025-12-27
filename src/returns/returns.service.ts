@@ -146,28 +146,22 @@ export class ReturnsService {
 
   // Restaurar estoque dos produtos devolvidos
   private async restoreStock(returnRequest: any) {
-    const updates = [];
-
     for (const item of returnRequest.items) {
       const orderItem = await this.prisma.orderItem.findUnique({
         where: { id: item.order_item_id },
       });
 
       if (orderItem) {
-        updates.push(
-          this.prisma.product.update({
-            where: { id: orderItem.product_id },
-            data: {
-              stock: {
-                increment: item.quantity,
-              },
+        await this.prisma.product.update({
+          where: { id: orderItem.product_id },
+          data: {
+            stock: {
+              increment: item.quantity,
             },
-          }),
-        );
+          },
+        });
       }
     }
-
-    await this.prisma.$transaction(updates);
   }
 
   // Listar devoluções do usuário

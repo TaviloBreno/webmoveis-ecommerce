@@ -116,6 +116,47 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 - Limpeza de lista
 - Validação de duplicatas
 
+### 🏆 **Programa de Fidelidade**
+- Sistema de pontos por compras
+- Tiers de fidelidade (bronze, silver, gold, platinum)
+- Multiplicadores de pontos por tier
+- Resgate de pontos para descontos
+- Transferência de pontos entre usuários
+- Histórico completo de transações
+- Conversão: 1 ponto = R$ 0,01 de desconto
+- Cálculo automático de tier baseado em pontos
+
+### 📍 **Rastreamento de Pedidos**
+- Sistema completo de tracking
+- Eventos de rastreamento detalhados
+- Códigos de rastreamento por transportadora
+- Rastreamento público por código
+- Status: order_placed, payment_confirmed, preparing, shipped, in_transit, out_for_delivery, delivered
+- Estimativa de entrega
+- Estatísticas de tempo médio de entrega
+- Criação de eventos em lote (bulk)
+
+### 🔄 **Devolução e Troca**
+- Solicitação de devolução ou troca
+- Múltiplos itens por solicitação
+- Status completos (requested, approved, rejected, received, processing, completed)
+- Cálculo automático de reembolso
+- Restauração de estoque após conclusão
+- Motivos e condições do produto
+- Painel admin para aprovação
+- Histórico de devoluções por usuário
+- Estatísticas de devoluções
+
+### 📸 **Upload de Imagens**
+- Upload de imagens de produtos
+- Suporte múltiplo (até 10 imagens)
+- Validação de tipo (JPEG, PNG, WebP, GIF)
+- Limite de tamanho (5MB por imagem)
+- Definição de imagem principal
+- Estatísticas de armazenamento
+- Gerenciamento completo (listar, deletar)
+- Storage local com diretório automático
+
 ### 💬 **Suporte & Atendimento**
 - Sistema de tickets de suporte
 - Mensagens em tempo real
