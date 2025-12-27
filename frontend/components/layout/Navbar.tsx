@@ -66,6 +66,13 @@ export default function Navbar() {
     router.push("/");
   };
 
+  // Função para obter a URL da dashboard baseada no role
+  const getDashboardUrl = () => {
+    if (user?.role === 'admin') return '/admin';
+    if (user?.role === 'employee') return '/funcionario';
+    return '/perfil';
+  };
+
   const isActive = (path: string) => pathname === path;
 
   return (
@@ -171,12 +178,12 @@ export default function Navbar() {
                   {isUserMenuOpen && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 border border-gray-200">
                       <Link
-                        href="/perfil"
+                        href={getDashboardUrl()}
                         className="flex items-center space-x-2 px-4 py-2 hover:bg-gray-100"
                         onClick={() => setIsUserMenuOpen(false)}
                       >
                         <Settings size={18} />
-                        <span>Meu Perfil</span>
+                        <span>Dashboard</span>
                       </Link>
                       <Link
                         href="/pedidos"
@@ -273,11 +280,11 @@ export default function Navbar() {
                     Carrinho ({itemCount})
                   </Link>
                   <Link
-                    href="/perfil"
+                    href={getDashboardUrl()}
                     className="block py-2 text-gray-700 hover:text-blue-600"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    Meu Perfil
+                    Dashboard
                   </Link>
                   <Link
                     href="/pedidos"

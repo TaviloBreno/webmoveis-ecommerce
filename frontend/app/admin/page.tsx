@@ -15,8 +15,6 @@ import {
 } from 'lucide-react';
 
 export default function AdminDashboard() {
-  const stats = [
-    {
   const router = useRouter();
   const { user, token } = useAuthStore();
   const [loading, setLoading] = useState(true);

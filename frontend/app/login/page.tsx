@@ -25,7 +25,15 @@ export default function LoginPage() {
     try {
       const response = await authService.login(formData);
       setAuth(response.user, response.access_token);
-      router.push("/produtos");
+      
+      // Redirecionar para dashboard apropriada baseado no role
+      if (response.user.role === 'admin') {
+        router.push('/admin');
+      } else if (response.user.role === 'employee') {
+        router.push('/funcionario');
+      } else {
+        router.push('/perfil');
+      }
     } catch (err: any) {
       setError(
         err.response?.data?.message || "Erro ao fazer login. Tente novamente."

@@ -6,16 +6,19 @@
 - **Email:** admin@webmoveis.com
 - **Senha:** admin123
 - **Permissões:** Acesso total ao sistema, dashboard administrativo, gerenciamento de produtos e usuários
+- **Dashboard:** http://localhost:3000/admin
 
 ### Funcionário
 - **Email:** func@webmoveis.com
 - **Senha:** func123
 - **Permissões:** Gerenciamento de pedidos, atendimento ao cliente
+- **Dashboard:** http://localhost:3000/funcionario
 
 ### Cliente
 - **Email:** cliente@webmoveis.com  
 - **Senha:** cliente123
 - **Permissões:** Acesso padrão de cliente, compras, visualização de pedidos
+- **Dashboard:** http://localhost:3000/perfil
 
 ---
 
@@ -47,7 +50,10 @@ O componente `ParallaxHero` utiliza:
 - Carrinho de compras
 - Sistema de autenticação
 - Gestão de pedidos
-- Dashboard administrativo
+- **Dashboards diferenciadas por role:**
+  - Admin: Estatísticas, gestão de pedidos, usuários e produtos
+  - Funcionário: Gerenciamento de pedidos e tickets de suporte
+  - Cliente: Pedidos, wishlist, fidelidade e benefícios
 
 ### 🎠 Hero Slider
 - Slider automático na página inicial
