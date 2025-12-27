@@ -49,10 +49,17 @@ model User {
   city String?
   state String?
   zip_code String?
+  role String @default("customer") // customer, admin
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
   orders Order[]
   cart Cart?
+  addresses Address[]
+  reviews Review[]
+  wishlist WishlistItem[]
+  notifications Notification[]
+  support_tickets SupportTicket[]
+  support_messages SupportMessage[]
 
   @@map("user")
 }
@@ -77,6 +84,8 @@ model Product {
   images ProductImage[]
   order_items OrderItem[]
   cart_items CartItem[]
+  reviews Review[]
+  wishlist_items WishlistItem[]
 
   @@map("product")
 }
@@ -97,6 +106,8 @@ model Order {
   id Int @id @default(autoincrement())
   user_id Int
   total Float
+  discount Float @default(0)
+  coupon_code String?
   status String @default("pending")
   shipping_address String
   shipping_city String
@@ -109,6 +120,7 @@ model Order {
   
   user User @relation(fields: [user_id], references: [id])
   items OrderItem[]
+  coupon Coupon? @relation(fields: [coupon_code], references: [code])
 
   @@map("order")
 }
@@ -151,4 +163,119 @@ model CartItem {
 
   @@unique([cart_id, product_id])
   @@map("cart_item")
+}
+
+model Address {
+  id Int @id @default(autoincrement())
+  user_id Int
+  label String // Casa, Trabalho, etc
+  street String
+  number String
+  complement String?
+  neighborhood String
+  city String
+  state String
+  zip_code String
+  is_default Boolean @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("address")
+}
+
+model Review {
+  id Int @id @default(autoincrement())
+  product_id Int
+  user_id Int
+  rating Int // 1-5 estrelas
+  comment String?
+  status String @default("pending") // pending, approved, rejected
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@unique([product_id, user_id])
+  @@map("review")
+}
+
+model Coupon {
+  id Int @id @default(autoincrement())
+  code String @unique
+  description String
+  type String // percentage, fixed
+  value Float
+  min_purchase Float @default(0)
+  max_discount Float?
+  usage_limit Int?
+  used_count Int @default(0)
+  valid_from DateTime
+  valid_until DateTime
+  is_active Boolean @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  orders Order[]
+
+  @@map("coupon")
+}
+
+model WishlistItem {
+  id Int @id @default(autoincrement())
+  user_id Int
+  product_id Int
+  created_at DateTime @default(now())
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [product_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, product_id])
+  @@map("wishlist_item")
+}
+
+model Notification {
+  id Int @id @default(autoincrement())
+  user_id Int
+  type String // order, price_drop, stock, promotion
+  title String
+  message String
+  data Json?
+  is_read Boolean @default(false)
+  created_at DateTime @default(now())
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("notification")
+}
+
+model SupportTicket {
+  id Int @id @default(autoincrement())
+  user_id Int
+  subject String
+  status String @default("open") // open, in_progress, closed
+  priority String @default("medium") // low, medium, high
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  messages SupportMessage[]
+
+  @@map("support_ticket")
+}
+
+model SupportMessage {
+  id Int @id @default(autoincrement())
+  ticket_id Int
+  user_id Int
+  message String
+  is_admin Boolean @default(false)
+  created_at DateTime @default(now())
+  
+  ticket SupportTicket @relation(fields: [ticket_id], references: [id], onDelete: Cascade)
+  user User @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("support_message")
 }
