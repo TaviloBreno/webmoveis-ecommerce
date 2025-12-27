@@ -64,12 +64,20 @@ Sistema completo de e-commerce desenvolvido com **NestJS**, seguindo princípios
 - Categorização inteligente
 - Controle de estoque automático
 
-### 🛒 **Sistema de Pedidos**
-- Carrinho de compras
+### 🛒 **Carrinho de Compras**
+- Adicionar/remover produtos
+- Atualizar quantidades
+- Validação de estoque em tempo real
+- Cálculo automático de totais
+- Persistência no banco de dados
+- Contador de itens
+
+### 📦 **Sistema de Pedidos**
 - Criação de pedidos com validação
 - Cálculo automático de totais
 - Controle de estoque em tempo real
 - Histórico completo
+- Rastreamento de status
 
 ### 📮 **Cálculo de Frete**
 - Integração com múltiplas transportadoras
@@ -228,6 +236,16 @@ GET    /products/:id           # Detalhes do produto
 GET    /categories             # Listar categorias
 ```
 
+#### 🛒 Carrinho (Autenticado)
+```http
+GET    /cart                   # Obter carrinho
+GET    /cart/count             # Contador de itens
+POST   /cart/items             # Adicionar ao carrinho
+PUT    /cart/items/:id         # Atualizar quantidade
+DELETE /cart/items/:id         # Remover item
+DELETE /cart                   # Limpar carrinho
+```
+
 #### 🏪 Lojas
 ```http
 POST   /stores/register        # Registrar loja
@@ -276,13 +294,15 @@ npm run test:e2e
 
 ### Cobertura de Testes
 
-- ✅ **28+ testes** passando
+- ✅ **49+ testes** passando
 - ✅ AuthService (8 testes)
 - ✅ UsersService (7 testes)
 - ✅ OrdersService (8 testes)
+- ✅ CartService (12 testes)
 - ✅ EmailService (5 testes)
 - ✅ KafkaService (3 testes)
 - ✅ PagSeguroService (3 testes)
+- ✅ CategoriesService (3 testes)
 
 ---
 
@@ -295,6 +315,7 @@ src/
 ├── products/          # Catálogo de produtos
 ├── categories/        # Categorias
 ├── stores/            # Gestão de lojas
+├── cart/              # Carrinho de compras
 ├── orders/            # Sistema de pedidos
 ├── shipping/          # Cálculo de frete
 ├── payments/          # Integração pagamentos
