@@ -16,7 +16,9 @@ import {
 import { useState, useEffect } from "react";
 import { useAuthStore } from "@/lib/store/auth-store";
 import { useCartStore } from "@/lib/store/cart-store";
+import { useWishlistStore } from "@/lib/store/wishlist-store";
 import { cartService } from "@/services/cart.service";
+import { wishlistService } from "@/services/wishlist.service";
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -36,14 +38,20 @@ export default function Navbar() {
 
   const { isAuthenticated, user, logout } = useAuthStore();
   const { itemCount, updateItemCount } = useCartStore();
+  const { wishlistCount, setWishlistCount } = useWishlistStore();
 
   useEffect(() => {
     if (isAuthenticated) {
       cartService.getCartCount().then((data) => {
         updateItemCount(data.count || 0);
       });
+      
+      // Carrega também o contador da wishlist
+      wishlistService.getWishlistCount().then((count) => {
+        setWishlistCount(count);
+      });
     }
-  }, [isAuthenticated, updateItemCount]);
+  }, [isAuthenticated, updateItemCount, setWishlistCount]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -127,14 +135,21 @@ export default function Navbar() {
               <>
                 <Link
                   href="/wishlist"
-                  className="text-gray-700 hover:text-blue-600 transition-colors"
+                  className="relative text-gray-700 hover:text-blue-600 transition-colors"
+                  title="Lista de Desejos"
                 >
                   <Heart size={24} />
+                  {wishlistCount > 0 && (
+                    <span className="absolute -top-2 -right-2 bg-pink-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                      {wishlistCount}
+                    </span>
+                  )}
                 </Link>
 
                 <Link
                   href="/carrinho"
                   className="relative text-gray-700 hover:text-blue-600 transition-colors"
+                  title="Carrinho de Compras"
                 >
                   <ShoppingCart size={24} />
                   {itemCount > 0 && (
