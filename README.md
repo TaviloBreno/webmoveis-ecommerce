@@ -1,98 +1,246 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# WebMoveis E-commerce API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API RESTful completa para e-commerce desenvolvida com NestJS, Prisma e PostgreSQL.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## 📋 Descrição
 
-## Description
+Sistema de e-commerce com autenticação JWT, gestão de produtos, categorias, lojas, pedidos e cálculo de frete.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## 🚀 Funcionalidades
 
-## Project setup
+### 🔐 Autenticação
+- Registro de usuários
+- Login com JWT
+- Autenticação Bearer Token
 
-```bash
-$ yarn install
-```
+### 👤 Gestão de Usuários
+- Visualizar perfil
+- Atualizar informações do perfil
+- Alterar senha
 
-## Compile and run the project
+### 🏪 Lojas
+- Registro de lojas
+- Listagem de lojas
+- Detalhes da loja
 
-```bash
-# development
-$ yarn run start
+### 📦 Produtos
+- Listagem de produtos (com filtro por categoria)
+- Detalhes do produto (com múltiplas imagens)
+- Produtos associados a categorias e lojas
 
-# watch mode
-$ yarn run start:dev
+### 🗂️ Categorias
+- Listagem de categorias
+- Produtos por categoria
 
-# production mode
-$ yarn run start:prod
-```
+### 📮 Frete
+- Cálculo de frete baseado em CEP e dimensões
+- Múltiplas opções de transportadoras (SEDEX, PAC, Expresso)
 
-## Run tests
+### 🛒 Pedidos
+- Criação de pedidos (realizar compra)
+- Listagem de pedidos do usuário
+- Detalhes do pedido
+- Controle de estoque automático
+- Validação de disponibilidade
 
-```bash
-# unit tests
-$ yarn run test
+## 🛠️ Tecnologias
 
-# e2e tests
-$ yarn run test:e2e
+- **NestJS** - Framework Node.js
+- **Prisma** - ORM
+- **PostgreSQL** - Banco de dados
+- **JWT** - Autenticação
+- **Bcrypt** - Criptografia de senhas
+- **Swagger** - Documentação da API
+- **TypeScript** - Linguagem
+- **Jest** - Testes
 
-# test coverage
-$ yarn run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+## 📦 Instalação
 
 ```bash
-$ yarn install -g mau
-$ mau deploy
+# Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
+
+# Executar migrations
+npm run migration:make init_database
+
+# (Opcional) Popular banco de dados
+npx prisma db seed
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+## ⚙️ Variáveis de Ambiente
 
-## Resources
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/webmoveis_db?schema=public"
+JWT_SECRET="your-secret-key-here-change-in-production"
+PORT=3000
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+## 🏃 Executar o Projeto
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+```bash
+# Desenvolvimento
+npm run start:dev
 
-## Support
+# Produção
+npm run build
+npm run start:prod
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+# Watch mode
+npm run start:watch
+```
 
-## Stay in touch
+## 🧪 Testes
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```bash
+# Testes unitários
+npm run test
 
-## License
+# Testes e2e
+npm run test:e2e
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+# Cobertura de testes
+npm run test:cov
+```
+
+## 📚 Documentação da API
+
+Após iniciar o servidor, acesse a documentação Swagger:
+
+```
+http://localhost:3000/docs
+```
+
+## 🔑 Endpoints Principais
+
+### Autenticação (Público)
+- `POST /auth/register` - Registrar novo usuário
+- `POST /auth/login` - Login
+
+### Usuários (Autenticado)
+- `GET /users/profile` - Obter perfil
+- `PUT /users/profile` - Atualizar perfil
+- `PUT /users/password` - Atualizar senha
+
+### Produtos (Público)
+- `GET /products` - Listar produtos
+- `GET /products/:id` - Detalhes do produto
+
+### Categorias (Público)
+- `GET /categories` - Listar categorias
+
+### Lojas (Público)
+- `POST /stores/register` - Registrar loja
+- `GET /stores` - Listar lojas
+- `GET /stores/:id` - Detalhes da loja
+
+### Frete (Público)
+- `POST /shipping/calculate` - Calcular frete
+
+### Pedidos (Autenticado)
+- `POST /orders` - Criar pedido (comprar)
+- `GET /orders` - Listar meus pedidos
+- `GET /orders/:id` - Detalhes do pedido
+
+## 🔐 Autenticação
+
+Para rotas protegidas, inclua o token JWT no header:
+
+```
+Authorization: Bearer {seu-token-jwt}
+```
+
+No Swagger, clique no botão "Authorize" e cole o token.
+
+## 🗄️ Estrutura do Banco de Dados
+
+### Tabelas Principais
+- **User** - Usuários do sistema
+- **Store** - Lojas cadastradas
+- **Category** - Categorias de produtos
+- **Product** - Produtos disponíveis
+- **ProductImage** - Imagens dos produtos
+- **Order** - Pedidos realizados
+- **OrderItem** - Itens dos pedidos
+
+## 📖 Exemplo de Uso
+
+### 1. Registrar usuário
+```bash
+POST /auth/register
+{
+  "name": "João Silva",
+  "email": "joao@email.com",
+  "password": "senha123",
+  "phone": "11987654321"
+}
+```
+
+### 2. Fazer login
+```bash
+POST /auth/login
+{
+  "email": "joao@email.com",
+  "password": "senha123"
+}
+# Retorna: { "access_token": "eyJhbGc..." }
+```
+
+### 3. Criar pedido
+```bash
+POST /orders
+Authorization: Bearer {token}
+{
+  "items": [
+    { "product_id": 1, "quantity": 2 },
+    { "product_id": 3, "quantity": 1 }
+  ],
+  "shipping_address": "Rua das Flores, 123",
+  "shipping_city": "São Paulo",
+  "shipping_state": "SP",
+  "shipping_zip_code": "01234-567",
+  "shipping_cost": 15.50,
+  "shipping_method": "SEDEX"
+}
+```
+
+## 🧪 Testes Implementados
+
+### AuthService
+- ✅ Registro de usuários
+- ✅ Validação de email duplicado
+- ✅ Login com credenciais válidas
+- ✅ Validação de senha incorreta
+- ✅ Validação de usuário
+
+### UsersService
+- ✅ Obter perfil do usuário
+- ✅ Atualizar informações do perfil
+- ✅ Atualizar senha
+- ✅ Validação de senha atual
+
+### OrdersService
+- ✅ Criação de pedido
+- ✅ Validação de produtos
+- ✅ Validação de estoque
+- ✅ Listagem de pedidos do usuário
+- ✅ Detalhes do pedido
+
+## 🤝 Contribuindo
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/MinhaFeature`)
+3. Commit suas mudanças (`git commit -m 'Adiciona MinhaFeature'`)
+4. Push para a branch (`git push origin feature/MinhaFeature`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT.
+
+## 👨‍💻 Autor
+
+Desenvolvido com ❤️ usando NestJS

@@ -29,6 +29,9 @@ export class OrdersService {
     let total = createOrderDto.shipping_cost;
     const orderItems = createOrderDto.items.map(item => {
       const product = products.find(p => p.id === item.product_id);
+      if (!product) {
+        throw new BadRequestException(`Product ${item.product_id} not found`);
+      }
       const subtotal = product.price * item.quantity;
       total += subtotal;
       return {
