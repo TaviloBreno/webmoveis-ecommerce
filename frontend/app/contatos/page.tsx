@@ -6,6 +6,7 @@ import Layout from "@/components/layout/Layout";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import Input from "@/components/ui/Input";
+import ParallaxHero from "@/components/ui/ParallaxHero";
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare } from "lucide-react";
 import Image from "next/image";
 
@@ -72,32 +73,13 @@ export default function ContatosPage() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <div className="relative h-96 bg-gradient-to-r from-primary-600 via-secondary-600 to-accent-600 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?auto=format&fit=crop&q=80&w=2000"
-            alt="Contato"
-            fill
-            className="object-cover opacity-20"
-          />
-        </div>
-        <div className="relative container mx-auto px-4 h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Entre em Contato
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90">
-              Estamos aqui para ajudar. Fale conosco!
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      {/* Hero Section with Parallax */}
+      <ParallaxHero
+        imageSrc="https://images.unsplash.com/photo-1423666639041-f56000c27a9a?w=1920&q=80"
+        title="Entre em Contato"
+        subtitle="Estamos aqui para ajudar. Fale conosco!"
+        height="h-[500px]"
+      />
 
       <div className="container mx-auto px-4 py-16">
         {/* Contact Info Cards */}

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import Card from "@/components/ui/Card";
+import ParallaxHero from "@/components/ui/ParallaxHero";
 import { Users, Target, Award, TrendingUp, Heart, Shield, Zap, Globe } from "lucide-react";
 import Image from "next/image";
 
@@ -75,32 +76,13 @@ export default function SobrePage() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <div className="relative h-96 bg-gradient-to-r from-primary-600 via-secondary-600 to-primary-600 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=2000"
-            alt="Nossa Equipe"
-            fill
-            className="object-cover opacity-20"
-          />
-        </div>
-        <div className="relative container mx-auto px-4 h-full flex items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="max-w-3xl"
-          >
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              Sobre Nós
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90">
-              Transformando a experiência de compra online desde 2015
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      {/* Hero Section with Parallax */}
+      <ParallaxHero
+        imageSrc="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1920&q=80"
+        title="Sobre Nós"
+        subtitle="Conheça nossa história e valores"
+        height="h-[500px]"
+      />
 
       {/* Stats Section */}
       <div className="bg-white py-16">

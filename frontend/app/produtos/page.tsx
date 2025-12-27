@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import Layout from "@/components/layout/Layout";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import ParallaxHero from "@/components/ui/ParallaxHero";
 import { productService } from "@/services/product.service";
 import { cartService } from "@/services/cart.service";
 import { useAuthStore } from "@/lib/store/auth-store";
@@ -71,31 +72,13 @@ export default function ProdutosPage() {
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <div className="relative h-64 bg-gradient-to-r from-primary-600 to-secondary-600 overflow-hidden">
-        <div className="absolute inset-0">
-          <Image
-            src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?auto=format&fit=crop&q=80&w=2000"
-            alt="Produtos"
-            fill
-            className="object-cover opacity-20"
-          />
-        </div>
-        <div className="relative container mx-auto px-4 h-full flex flex-col justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Nossos Produtos
-            </h1>
-            <p className="text-xl text-white/90 max-w-2xl">
-              Explore nossa coleção com os melhores produtos do mercado
-            </p>
-          </motion.div>
-        </div>
-      </div>
+      {/* Hero Section with Parallax */}
+      <ParallaxHero
+        imageSrc="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=1920&q=80"
+        title="Nossos Produtos"
+        subtitle="Explore nossa coleção com os melhores produtos do mercado"
+        height="h-[400px]"
+      />
 
       <div className="container mx-auto px-4 py-12">
         {/* Header */}
