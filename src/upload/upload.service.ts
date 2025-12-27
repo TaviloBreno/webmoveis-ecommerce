@@ -102,7 +102,7 @@ export class UploadService {
 
     this.ensureUploadDir();
 
-    const uploadedImages = [];
+    const uploadedImages: { id: number; url: string }[] = [];
 
     for (const file of files) {
       const fileName = `product_${productId}_${Date.now()}_${Math.random().toString(36).substring(7)}${path.extname(file.originalname)}`;
